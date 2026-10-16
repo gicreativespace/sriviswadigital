@@ -15,6 +15,7 @@
   --sv-green:#00923F;--sv-gold:#E0A800;--sv-gold-light:#FFC107;
   --sv-red:#D32F2F;
   --muted:#607789;--border:rgba(0,43,74,0.10);
+  --wa-green:#25D366;
   --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -27,7 +28,6 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 .screen{display:none;min-height:100vh;flex-direction:column;}
 .screen.active{display:flex;}
 
-/* HEADER */
 .header{background:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;
   border-bottom:1px solid var(--border);box-shadow:0 2px 10px rgba(0,43,74,0.04);
   position:sticky;top:0;z-index:50;padding-top:calc(14px + var(--safe-top));}
@@ -43,23 +43,19 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   display:flex;align-items:center;justify-content:center;text-decoration:none;}
 .header-btn:hover{background:rgba(0,87,153,0.15);}
 
-/* CONTAINER */
 .container{flex:1;max-width:640px;width:100%;margin:0 auto;padding:24px 20px 40px;}
 
-/* HERO */
 .hero{text-align:center;padding:20px 0 16px;}
 .hero h1{font-family:"Playfair Display",serif;font-size:30px;line-height:1.1;
   background:linear-gradient(135deg,#E0A800,#002B4A);
   -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px;}
 .hero p{font-size:13px;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto;}
 
-/* CARD */
 .card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;
   box-shadow:0 8px 24px rgba(0,43,74,0.06);margin-bottom:16px;}
 .card-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:800;color:var(--sv-navy);margin-bottom:16px;}
 .card-title .dot{width:8px;height:8px;border-radius:50%;background:var(--sv-gold);}
 
-/* FORM */
 .field{margin-bottom:14px;}
 .field-label{display:block;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
   color:var(--sv-blue);margin-bottom:6px;}
@@ -68,8 +64,8 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   font-family:inherit;font-size:14px;color:var(--sv-navy);transition:all 0.2s;}
 .field-input:focus,.field-select:focus{outline:none;border-color:var(--sv-blue);box-shadow:0 0 0 4px rgba(0,87,153,0.10);}
 .field-input.code-input{letter-spacing:6px;text-align:center;font-size:18px;font-weight:700;font-family:"SF Mono",monospace;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
-/* BUTTONS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:14px 22px;border-radius:12px;border:none;font-family:inherit;
   font-size:13px;font-weight:800;letter-spacing:0.3px;cursor:pointer;
@@ -81,10 +77,16 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 .btn-blue{background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));color:#fff;
   box-shadow:0 8px 20px rgba(0,87,153,0.22);}
 .btn-blue:hover{box-shadow:0 12px 28px rgba(0,87,153,0.34);}
+.btn-green{background:linear-gradient(135deg,#00923F,#22a35f);color:#fff;
+  box-shadow:0 8px 20px rgba(0,146,63,0.24);}
 .btn-outline{background:#fff;border:1.5px solid rgba(0,43,74,0.14);color:var(--sv-navy);}
 .btn-outline:hover{border-color:var(--sv-blue);color:var(--sv-blue);}
+.btn-wa{background:linear-gradient(135deg,#25D366,#1da851);color:#fff;
+  box-shadow:0 8px 20px rgba(37,211,102,0.28);}
+.btn-wa:hover{box-shadow:0 12px 28px rgba(37,211,102,0.40);}
+.btn-danger{background:#fff;border:1.5px solid rgba(211,47,47,0.35);color:var(--sv-red);}
+.btn-danger:hover{background:rgba(211,47,47,0.06);border-color:var(--sv-red);}
 
-/* DASHBOARD CARD */
 .dash-hero{background:linear-gradient(135deg,#E0A800,#FFC107);color:#002B4A;
   border-radius:18px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden;}
 .dash-hero::before{content:"";position:absolute;top:-40px;right:-40px;
@@ -94,7 +96,6 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 .dash-hero-name{font-family:"Playfair Display",serif;font-size:24px;font-weight:800;line-height:1.15;}
 .dash-hero-sub{font-size:11.5px;margin-top:6px;font-weight:600;opacity:0.85;}
 
-/* TILES */
 .tiles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px;}
 .tile{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:20px 14px;
   text-align:center;cursor:pointer;transition:all 0.25s;}
@@ -111,7 +112,6 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 .tile-label{font-size:13px;font-weight:800;color:var(--sv-navy);line-height:1.2;}
 .tile-desc{font-size:10.5px;color:var(--muted);font-weight:600;margin-top:3px;}
 
-/* SECTION HEAD */
 .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 .section-head h3{font-size:15px;font-weight:800;color:var(--sv-navy);}
 .badge{background:rgba(224,168,0,0.15);color:#9a7300;font-size:11px;
@@ -122,23 +122,55 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 .empty .ico{font-size:36px;opacity:0.4;margin-bottom:10px;}
 .empty p{font-size:12px;font-weight:600;}
 
-/* TOAST */
+/* STAFF CARD */
+.staff-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;
+  padding:16px;margin-bottom:12px;transition:all 0.25s;}
+.staff-card:hover{border-color:var(--sv-blue);}
+.staff-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.staff-avatar{width:48px;height:48px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));
+  color:#fff;font-weight:800;font-size:20px;
+  display:flex;align-items:center;justify-content:center;}
+.staff-avatar.office{background:linear-gradient(135deg,#00923F,#22a35f);}
+.staff-info{flex:1;min-width:0;}
+.staff-name{font-size:15px;font-weight:800;color:var(--sv-navy);margin-bottom:3px;}
+.staff-meta{font-size:11px;color:var(--muted);font-weight:600;}
+.staff-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  background:#F8FBFF;border-radius:10px;padding:12px;margin-bottom:12px;}
+.staff-detail-item .label{font-size:9.5px;font-weight:800;letter-spacing:0.8px;
+  text-transform:uppercase;color:var(--sv-blue);margin-bottom:3px;}
+.staff-detail-item .value{font-size:14px;font-weight:800;color:var(--sv-navy);}
+.staff-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.staff-actions .btn{padding:10px 12px;font-size:12px;}
+
+/* Success popup */
+.success-popup{background:linear-gradient(135deg,#F0FFF4,#E8F5E9);
+  border:1.5px solid rgba(0,146,63,0.30);border-radius:16px;
+  padding:20px;margin-bottom:16px;text-align:center;}
+.success-popup .icon{font-size:44px;margin-bottom:8px;}
+.success-popup .title{font-family:"Playfair Display",serif;font-size:20px;
+  font-weight:800;color:var(--sv-green);margin-bottom:6px;}
+.success-popup .sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px;}
+
 .toast{position:fixed;bottom:calc(20px + var(--safe-bottom));left:50%;
   transform:translate(-50%,140%);background:var(--sv-navy);color:#fff;
   padding:12px 22px;border-radius:50px;font-size:12.5px;font-weight:700;
-  z-index:2000;transition:transform 0.4s;box-shadow:0 12px 30px rgba(0,43,74,0.4);max-width:90vw;text-align:center;}
+  z-index:2000;transition:transform 0.4s;box-shadow:0 12px 30px rgba(0,43,74,0.4);
+  max-width:90vw;text-align:center;}
 .toast.show{transform:translate(-50%,0);}
 .toast.error{background:#C62828;}
 .toast.success{background:var(--sv-green);}
 
 @media (max-width:480px){
   .hero h1{font-size:26px;}
+  .field-row{grid-template-columns:1fr;}
+  .staff-details{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
 
-<!-- ===================== SCREEN 1: WELCOME / PIN ===================== -->
+<!-- ===================== SCREEN 1: LOGIN ===================== -->
 <div class="screen active" id="screen-login">
   <div class="header">
     <img src="./assets/logo.png" class="header-logo" alt=""
@@ -150,16 +182,13 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
     </div>
     <a class="header-btn" href="./index.html" title="Home">🏠</a>
   </div>
-  <div class="container" id="login-container">
-
+  <div class="container">
     <div class="hero">
       <h1>Principal Login 👑</h1>
       <p>Welcome back! Enter your PIN to continue.</p>
     </div>
-
     <div class="card">
-      <div class="card-title"><span class="dot"></span> <span id="welcome-text">Welcome</span></div>
-
+      <div class="card-title"><span class="dot"></span> <span id="welcome-text">Loading...</span></div>
       <div class="field">
         <label class="field-label">Enter 4-Digit PIN</label>
         <input type="password" id="login-pin" class="field-input code-input"
@@ -167,13 +196,11 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
                inputmode="numeric" autocomplete="off"
                onkeydown="if(event.key==='Enter')doLogin()">
       </div>
-
       <button class="btn btn-primary" onclick="doLogin()">
         🔐 Login
       </button>
-
       <button class="btn btn-outline" onclick="goSetup()" style="margin-top:10px;">
-        ⚙️ Setup / Change Principal
+        ⚙️ Setup / Reset Principal
       </button>
     </div>
   </div>
@@ -197,7 +224,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
     <div class="dash-hero">
       <div class="dash-hero-inner">
         <div class="dash-hero-label">Principal</div>
-        <div class="dash-hero-name" id="dash-name">K. Rama Krishna</div>
+        <div class="dash-hero-name" id="dash-name">—</div>
         <div class="dash-hero-sub">Sri Viswa School · Palakollu</div>
       </div>
     </div>
@@ -213,7 +240,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
         <div class="tile-label">Approved</div>
         <div class="tile-desc">Recent</div>
       </div>
-      <div class="tile" onclick="comingSoon('Staff Records')">
+      <div class="tile" onclick="openStaff()">
         <div class="tile-icon blue">👨‍🏫</div>
         <div class="tile-label">Staff</div>
         <div class="tile-desc">Manage</div>
@@ -246,28 +273,207 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
+<!-- ===================== SCREEN 3: STAFF RECORDS ===================== -->
+<div class="screen" id="screen-staff">
+  <div class="header">
+    <button class="header-btn" onclick="backDash()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title">Staff Records</div>
+      <div class="header-sub">Manage Teachers &amp; Office</div>
+    </div>
+  </div>
+  <div class="container">
+
+    <div class="tiles-grid" style="grid-template-columns:1fr 1fr;">
+      <div class="tile" onclick="openAddStaff('teacher')">
+        <div class="tile-icon blue">👨‍🏫</div>
+        <div class="tile-label">Add Teacher</div>
+        <div class="tile-desc">Create new</div>
+      </div>
+      <div class="tile" onclick="openAddStaff('office')">
+        <div class="tile-icon green">🏢</div>
+        <div class="tile-label">Add Office</div>
+        <div class="tile-desc">Create new</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">
+        <h3>👥 All Staff</h3>
+        <span class="badge" id="staff-count">0</span>
+      </div>
+      <div id="staff-list"><div class="empty"><div class="ico">📭</div><p>No staff added yet</p></div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SCREEN 4: ADD STAFF ===================== -->
+<div class="screen" id="screen-add-staff">
+  <div class="header">
+    <button class="header-btn" onclick="backStaff()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title" id="add-staff-title">Add Staff</div>
+      <div class="header-sub">Create login credentials</div>
+    </div>
+  </div>
+  <div class="container">
+
+    <div class="hero">
+      <h1 id="add-hero-title">Add Teacher 👨‍🏫</h1>
+      <p id="add-hero-sub">Create login for a new teacher. PIN will be auto-generated.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Staff Details</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Prefix</label>
+          <select id="s-prefix" class="field-select">
+            <option value="">Select</option>
+            <option>Mr.</option>
+            <option>Mrs.</option>
+            <option>Ms.</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Phone Number</label>
+          <input type="tel" id="s-phone" class="field-input"
+                 placeholder="9876543210" maxlength="10"
+                 inputmode="numeric" oninput="updatePinPreview()">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Full Name</label>
+        <input type="text" id="s-name" class="field-input"
+               placeholder="e.g. Lakshmi" maxlength="40">
+      </div>
+
+      <div id="teacher-fields">
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">Class</label>
+            <select id="s-class" class="field-select">
+              <option value="">Select</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Section</label>
+            <select id="s-section" class="field-select">
+              <option value="">Select</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F8FBFF;border:1.5px dashed rgba(0,87,153,0.30);
+                  border-radius:12px;padding:14px;text-align:center;margin-bottom:14px;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+                    color:var(--sv-blue);margin-bottom:6px;">
+          Auto-Generated PIN
+        </div>
+        <div id="pin-preview" style="font-family:'SF Mono',monospace;font-size:28px;
+                    font-weight:800;color:var(--sv-navy);letter-spacing:6px;">
+          — • — • —
+        </div>
+        <div style="font-size:10.5px;color:var(--muted);margin-top:6px;">
+          Formula: 9999 − last 4 digits of phone
+        </div>
+      </div>
+
+      <button class="btn btn-green" onclick="saveStaff()">
+        ✓ Create Staff Account
+      </button>
+
+      <button class="btn btn-outline" onclick="backStaff()" style="margin-top:10px;">
+        ← Cancel
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SCREEN 5: SUCCESS ===================== -->
+<div class="screen" id="screen-staff-success">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Staff Created</div>
+      <div class="header-sub">Share Credentials</div>
+    </div>
+    <button class="header-btn" onclick="backStaff()" title="Close">✕</button>
+  </div>
+  <div class="container">
+
+    <div class="success-popup">
+      <div class="icon">✓</div>
+      <div class="title">Staff Created!</div>
+      <div class="sub">Share credentials with the staff member.<br>They can now login to the app.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--sv-green);"></span> Login Credentials</div>
+
+      <div class="staff-details" style="grid-template-columns:1fr;">
+        <div class="staff-detail-item">
+          <div class="label">Name</div>
+          <div class="value" id="result-name">—</div>
+        </div>
+        <div class="staff-detail-item" id="result-class-wrap">
+          <div class="label">Class</div>
+          <div class="value" id="result-class">—</div>
+        </div>
+        <div class="staff-detail-item">
+          <div class="label">Phone</div>
+          <div class="value" id="result-phone">—</div>
+        </div>
+        <div class="staff-detail-item">
+          <div class="label">Login PIN</div>
+          <div class="value" id="result-pin" style="font-family:'SF Mono',monospace;
+                     letter-spacing:4px;color:var(--sv-blue);font-size:20px;">—</div>
+        </div>
+      </div>
+
+      <button class="btn btn-wa" onclick="shareWhatsApp()" style="margin-bottom:10px;">
+        📱 Share on WhatsApp
+      </button>
+
+      <button class="btn btn-outline" onclick="copyCredentials()">
+        📋 Copy Credentials
+      </button>
+
+      <button class="btn btn-outline" onclick="backStaff()" style="margin-top:10px;">
+        ← Back to Staff List
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
-<!-- Firebase + Config + Utils -->
 <script src="./firebase-config.js"></script>
 <script src="./config.js"></script>
 <script src="./utils.js"></script>
 
 <script>
 /* ============================================================
-   Principal Login + Dashboard
+   Principal Desk — With Staff Records
    ============================================================ */
 
 let FB = { ready: false, db: null, fs: null, auth: null };
 let principal = null;
+let currentStaffRole = "teacher";
+let lastCreatedStaff = null;
 
-// Init Firebase
+/* ========== FIREBASE ========== */
 (async function initFirebase() {
   try {
-    if (!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey) {
-      console.warn("⚠️ Firebase config not found");
-      return;
-    }
+    if (!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey) return;
     const [appMod, fsMod, authMod] = await Promise.all([
       import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
       import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"),
@@ -300,24 +506,15 @@ function showScreen(id) {
   window.scrollTo({ top: 0 });
 }
 
-function comingSoon(name) {
-  toast("Coming soon: " + name);
-}
+function comingSoon(name) { toast("Coming soon: " + name); }
 window.comingSoon = comingSoon;
 
 /* ========== LOGIN ========== */
 function doLogin() {
   const pin = document.getElementById("login-pin").value.trim();
-
-  if (!principal) {
-    toast("Setup not done. Redirecting...", "error");
-    setTimeout(() => goSetup(), 800);
-    return;
-  }
-
+  if (!principal) return toast("Setup required", "error");
   if (!pin) return toast("Enter your PIN", "error");
   if (pin !== principal.pin) return toast("Incorrect PIN", "error");
-
   toast("Welcome, " + principal.prefix + " " + principal.name, "success");
   setTimeout(showDashboard, 500);
 }
@@ -339,32 +536,350 @@ window.logout = logout;
 
 /* ========== DASHBOARD ========== */
 function showDashboard() {
+  if (!principal) return;
   document.getElementById("dash-name").textContent =
     principal.prefix + " " + principal.name;
-  document.getElementById("dash-sub").textContent = "Approval Center";
   showScreen("screen-dashboard");
 }
 
+function backDash() {
+  showDashboard();
+}
+window.backDash = backDash;
+
+/* ========== STAFF RECORDS ========== */
+function openStaff() {
+  populateAddStaffDropdowns();
+  showScreen("screen-staff");
+  loadStaffList();
+}
+window.openStaff = openStaff;
+
+function populateAddStaffDropdowns() {
+  const cls = document.getElementById("s-class");
+  const sec = document.getElementById("s-section");
+
+  if (cls.options.length <= 1) {
+    SV_CONFIG.classes.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.code;
+      opt.textContent = c.display;
+      cls.appendChild(opt);
+    });
+  }
+  if (sec.options.length <= 1) {
+    SV_CONFIG.sections.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s.code;
+      opt.textContent = s.display;
+      sec.appendChild(opt);
+    });
+  }
+}
+
+function openAddStaff(role) {
+  currentStaffRole = role;
+
+  // Reset form
+  document.getElementById("s-prefix").value = "";
+  document.getElementById("s-name").value = "";
+  document.getElementById("s-phone").value = "";
+  document.getElementById("s-class").value = "";
+  document.getElementById("s-section").value = "";
+  document.getElementById("pin-preview").textContent = "— • — • —";
+
+  // Show/hide teacher fields
+  const teacherFields = document.getElementById("teacher-fields");
+  const addTitle = document.getElementById("add-staff-title");
+  const heroTitle = document.getElementById("add-hero-title");
+  const heroSub = document.getElementById("add-hero-sub");
+
+  if (role === "teacher") {
+    teacherFields.style.display = "block";
+    addTitle.textContent = "Add Teacher";
+    heroTitle.textContent = "Add Teacher 👨‍🏫";
+    heroSub.textContent = "Create login for a new teacher. PIN auto-generated.";
+  } else {
+    teacherFields.style.display = "none";
+    addTitle.textContent = "Add Office Staff";
+    heroTitle.textContent = "Add Office Staff 🏢";
+    heroSub.textContent = "Create login for office staff. PIN auto-generated.";
+  }
+
+  showScreen("screen-add-staff");
+}
+window.openAddStaff = openAddStaff;
+
+function backStaff() {
+  showScreen("screen-staff");
+  loadStaffList();
+}
+window.backStaff = backStaff;
+
+function updatePinPreview() {
+  const phone = document.getElementById("s-phone").value.trim();
+  if (/^\d{10}$/.test(phone)) {
+    const pin = SV.calculatePIN(phone);
+    document.getElementById("pin-preview").textContent =
+      pin.split("").join(" ");
+  } else {
+    document.getElementById("pin-preview").textContent = "— • — • —";
+  }
+}
+window.updatePinPreview = updatePinPreview;
+
+async function saveStaff() {
+  const prefix = document.getElementById("s-prefix").value;
+  const name = document.getElementById("s-name").value.trim();
+  const phone = document.getElementById("s-phone").value.trim();
+  const classCode = document.getElementById("s-class").value;
+  const sectionCode = document.getElementById("s-section").value;
+
+  if (!prefix) return toast("Select prefix", "error");
+  if (!name) return toast("Enter name", "error");
+  if (!/^\d{10}$/.test(phone)) return toast("Enter 10-digit phone", "error");
+
+  if (currentStaffRole === "teacher") {
+    if (!classCode) return toast("Select class", "error");
+    if (!sectionCode) return toast("Select section", "error");
+  }
+
+  if (!FB.ready || !FB.db) return toast("Firebase not ready", "error");
+
+  const pin = SV.calculatePIN(phone);
+
+  // Check duplicate phone
+  try {
+    const { collection, query, where, getDocs } = FB.fs;
+    const staffRef = collection(FB.db, "staff");
+    const q = query(staffRef, where("phone", "==", phone));
+    const existing = await getDocs(q);
+    if (!existing.empty) {
+      return toast("Phone number already registered", "error");
+    }
+  } catch (e) {
+    console.warn("Duplicate check failed:", e);
+  }
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = "Creating...";
+
+  const staffData = {
+    role: currentStaffRole,
+    prefix: prefix,
+    name: name,
+    phone: phone,
+    pin: pin,
+    status: "active",
+    createdAt: Date.now()
+  };
+
+  if (currentStaffRole === "teacher") {
+    staffData.class = classCode;
+    staffData.section = sectionCode;
+  }
+
+  try {
+    const { collection, addDoc } = FB.fs;
+    const staffRef = collection(FB.db, "staff");
+    const docRef = await addDoc(staffRef, staffData);
+
+    staffData.id = docRef.id;
+    lastCreatedStaff = staffData;
+
+    // Show success screen with credentials
+    showStaffSuccess(staffData);
+
+  } catch (e) {
+    console.error(e);
+    toast("Create failed: " + e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "✓ Create Staff Account";
+  }
+}
+window.saveStaff = saveStaff;
+
+function showStaffSuccess(staff) {
+  document.getElementById("result-name").textContent =
+    `${staff.prefix} ${staff.name}`;
+  document.getElementById("result-phone").textContent = staff.phone;
+  document.getElementById("result-pin").textContent =
+    staff.pin.split("").join(" ");
+
+  const classWrap = document.getElementById("result-class-wrap");
+  if (staff.role === "teacher") {
+    classWrap.style.display = "block";
+    document.getElementById("result-class").textContent =
+      `${SV.getClassNameByCode(staff.class)} - Section ${SV.getSectionNameByCode(staff.section)}`;
+  } else {
+    classWrap.style.display = "none";
+  }
+
+  showScreen("screen-staff-success");
+  toast("Staff created ✓", "success");
+}
+
+function shareWhatsApp() {
+  if (!lastCreatedStaff) return;
+  const s = lastCreatedStaff;
+  const classLine = s.role === "teacher"
+    ? `📚 Class: ${SV.getClassNameByCode(s.class)} - Section ${SV.getSectionNameByCode(s.section)}\n`
+    : "";
+
+  const msg = `🏫 *Sri Viswa School — Login Credentials*\n\n` +
+    `👤 Name: ${s.prefix} ${s.name}\n` +
+    classLine +
+    `📱 Phone: ${s.phone}\n` +
+    `🔐 Login PIN: ${s.pin}\n\n` +
+    `Login at: https://gicreativespace.github.io/sriviswadigital/${s.role}.html\n\n` +
+    `⚠️ Please keep your PIN secure.`;
+
+  window.open("https://wa.me/91" + s.phone + "?text=" + encodeURIComponent(msg), "_blank");
+}
+window.shareWhatsApp = shareWhatsApp;
+
+function copyCredentials() {
+  if (!lastCreatedStaff) return;
+  const s = lastCreatedStaff;
+  const text = `Name: ${s.prefix} ${s.name}\nPhone: ${s.phone}\nPIN: ${s.pin}`;
+  navigator.clipboard.writeText(text).then(() => {
+    toast("Copied to clipboard ✓", "success");
+  }).catch(() => {
+    toast("Copy failed", "error");
+  });
+}
+window.copyCredentials = copyCredentials;
+
+/* ========== LOAD STAFF LIST ========== */
+function loadStaffList() {
+  if (!FB.ready || !FB.db) return;
+  const { collection, onSnapshot } = FB.fs;
+  const staffRef = collection(FB.db, "staff");
+
+  onSnapshot(staffRef, (snap) => {
+    const list = [];
+    snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+    list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+    const el = document.getElementById("staff-list");
+    document.getElementById("staff-count").textContent = list.length;
+
+    if (list.length === 0) {
+      el.innerHTML = '<div class="empty"><div class="ico">📭</div><p>No staff added yet</p></div>';
+      return;
+    }
+
+    el.innerHTML = list.map(s => {
+      const isTeacher = s.role === "teacher";
+      const initial = (s.name || "?").charAt(0).toUpperCase();
+      const classLine = isTeacher && s.class
+        ? `📚 ${SV.getClassNameByCode(s.class)} - Sec ${SV.getSectionNameByCode(s.section)}`
+        : `🏢 Office Staff`;
+
+      return `
+        <div class="staff-card">
+          <div class="staff-head">
+            <div class="staff-avatar ${isTeacher ? '' : 'office'}">${SV.escapeHtml(initial)}</div>
+            <div class="staff-info">
+              <div class="staff-name">${SV.escapeHtml((s.prefix || "") + " " + (s.name || ""))}</div>
+              <div class="staff-meta">${classLine} · 📱 ${SV.escapeHtml(s.phone || "—")}</div>
+            </div>
+          </div>
+          <div class="staff-details">
+            <div class="staff-detail-item">
+              <div class="label">Login PIN</div>
+              <div class="value" style="font-family:'SF Mono',monospace;letter-spacing:3px;color:var(--sv-blue);">
+                ${SV.escapeHtml(s.pin || "—")}
+              </div>
+            </div>
+            <div class="staff-detail-item">
+              <div class="label">Role</div>
+              <div class="value">${isTeacher ? "Teacher" : "Office"}</div>
+            </div>
+          </div>
+          <div class="staff-actions">
+            <button class="btn btn-wa" onclick="shareStaffWA('${s.id}')">📱 Share</button>
+            <button class="btn btn-danger" onclick="removeStaff('${s.id}')">🗑 Remove</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  });
+}
+
+function shareStaffWA(staffId) {
+  // Reload staff list from DOM? Get from existing? Simple: fetch from snapshot — not ideal
+  // For now, use cached data from list. Better: fetch doc directly.
+  if (!FB.ready || !FB.db) return;
+  const { doc, getDoc } = FB.fs;
+  getDoc(doc(FB.db, "staff", staffId)).then(snap => {
+    if (!snap.exists()) return toast("Staff not found", "error");
+    const s = snap.data();
+    const classLine = s.role === "teacher" && s.class
+      ? `📚 Class: ${SV.getClassNameByCode(s.class)} - Section ${SV.getSectionNameByCode(s.section)}\n`
+      : "";
+    const msg = `🏫 *Sri Viswa School — Login Credentials*\n\n` +
+      `👤 Name: ${s.prefix} ${s.name}\n` +
+      classLine +
+      `📱 Phone: ${s.phone}\n` +
+      `🔐 Login PIN: ${s.pin}\n\n` +
+      `Login at: https://gicreativespace.github.io/sriviswadigital/${s.role}.html\n\n` +
+      `⚠️ Please keep your PIN secure.`;
+    window.open("https://wa.me/91" + s.phone + "?text=" + encodeURIComponent(msg), "_blank");
+  });
+}
+window.shareStaffWA = shareStaffWA;
+
+async function removeStaff(staffId) {
+  if (!confirm("Remove this staff member?\n\nThey will lose access immediately.")) return;
+  if (!FB.ready || !FB.db) return;
+  try {
+    const { doc, deleteDoc } = FB.fs;
+    await deleteDoc(doc(FB.db, "staff", staffId));
+    toast("Staff removed ✓", "success");
+  } catch (e) {
+    console.error(e);
+    toast("Remove failed: " + e.message, "error");
+  }
+}
+window.removeStaff = removeStaff;
+
 /* ========== INIT ========== */
-(function init() {
-  // Load principal from localStorage
+(async function init() {
   principal = SV.loadLocal("svs_principal", null);
 
-  if (principal) {
-    // Welcome text
+  if (!principal && FB.ready && FB.db) {
+    try {
+      const { doc, getDoc } = FB.fs;
+      const snap = await getDoc(doc(FB.db, "config", "master"));
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.principal) {
+          principal = data.principal;
+          SV.saveLocal("svs_principal", principal);
+        }
+      }
+    } catch (e) {
+      console.warn("Firestore check failed:", e);
+    }
+  }
+
+  if (principal && principal.name) {
     document.getElementById("welcome-text").textContent =
       "Welcome, " + principal.prefix + " " + principal.name;
-    // Focus PIN input
-    setTimeout(() => document.getElementById("login-pin").focus(), 400);
+    document.getElementById("dash-name").textContent =
+      principal.prefix + " " + principal.name;
+    setTimeout(() => {
+      const p = document.getElementById("login-pin");
+      if (p) p.focus();
+    }, 400);
     console.log("✅ Principal loaded:", principal.name);
   } else {
-    // No setup done
-    document.getElementById("welcome-text").textContent = "Setup Required";
-    setTimeout(() => {
-      if (confirm("Setup not complete. Go to Valiass Setup?")) {
-        window.location.href = "./setup.html";
-      }
-    }, 500);
+    console.log("⚠️ Setup not done — redirecting to setup");
+    window.location.replace("./setup.html");
+    return;
   }
 
   console.log("✅ principal.html loaded");
