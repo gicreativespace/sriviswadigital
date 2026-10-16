@@ -78,8 +78,6 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 .btn-green:hover{box-shadow:0 12px 28px rgba(0,146,63,0.34);}
 .btn-outline{background:#fff;border:1.5px solid rgba(0,43,74,0.14);color:var(--sv-navy);}
 .btn-outline:hover{border-color:var(--sv-blue);color:var(--sv-blue);}
-.btn-danger{background:#fff;border:1.5px solid rgba(211,47,47,0.35);color:var(--sv-red);}
-.btn-danger:hover{background:rgba(211,47,47,0.06);border-color:var(--sv-red);}
 
 .dash-hero{background:linear-gradient(135deg,#005799,#002B4A);color:#fff;
   border-radius:18px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden;}
@@ -157,7 +155,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 </head>
 <body>
 
-<!-- ===================== SCREEN 1: LOGIN ===================== -->
+<!-- SCREEN 1: LOGIN -->
 <div class="screen active" id="screen-login">
   <div class="header">
     <img src="./assets/logo.png" class="header-logo" alt=""
@@ -206,7 +204,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 2: DASHBOARD ===================== -->
+<!-- SCREEN 2: DASHBOARD -->
 <div class="screen" id="screen-dashboard">
   <div class="header">
     <img src="./assets/logo.png" class="header-logo" alt=""
@@ -281,7 +279,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 3: CLASS CREATION ===================== -->
+<!-- SCREEN 3: CLASS CREATION -->
 <div class="screen" id="screen-class">
   <div class="header">
     <button class="header-btn" onclick="backDash()" title="Back">←</button>
@@ -336,7 +334,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 
 <script>
 /* ============================================================
-   Teacher Desk Logic — Phase 1 (Fixed Stack Overflow)
+   Teacher Desk Logic — Phase 1 (Stack Overflow Fixed)
    ============================================================ */
 
 let FB = { ready: false, db: null, fs: null, auth: null };
@@ -381,7 +379,6 @@ function showScreen(id) {
 
 function comingSoon(name) { toast("Coming soon: " + name); }
 
-// Capitalize name for display
 function capitalizeName(n) {
   return String(n || "").split(" ").map(w =>
     w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()
@@ -543,7 +540,7 @@ function openMyClass() {
     document.getElementById("class-hero-sub").textContent = 
       "Add students roll-wise. Enter Name and Date of Birth.";
     renderStudentRows([]);
-    addStudentRow();
+    createStudentRow();
   }
 
   showScreen("screen-class");
@@ -558,14 +555,14 @@ function renderStudentRows(students) {
   container.innerHTML = "";
 
   if (students && students.length > 0) {
-    students.forEach(s => addStudentRow(s.roll, s.name, s.dob));
+    students.forEach(s => createStudentRow(s.roll, s.name, s.dob));
   }
 
   updateStudentCount();
 }
 
-// Main addStudentRow function
-function addStudentRow(roll, name, dob) {
+// Renamed to createStudentRow to avoid conflict with window.addStudentRow
+function createStudentRow(roll, name, dob) {
   const container = document.getElementById("student-rows");
   const currentRows = container.children.length;
   const newRoll = roll || (currentRows + 1);
@@ -714,7 +711,7 @@ async function saveClass() {
 }
 
 /* ============================================================
-   EXPOSE GLOBALS (CRITICAL — for inline onclick handlers)
+   EXPOSE GLOBALS (for HTML onclick)
    ============================================================ */
 
 window.doLogin = doLogin;
@@ -723,7 +720,7 @@ window.logout = logout;
 window.comingSoon = comingSoon;
 window.openMyClass = openMyClass;
 window.backDash = backDash;
-window.addStudentRow = function() { addStudentRow(); };
+window.addStudentRow = function() { createStudentRow(); };
 window.deleteStudentRow = deleteStudentRow;
 window.saveClass = saveClass;
 window.loadMyClass = loadMyClass;
