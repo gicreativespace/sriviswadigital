@@ -79,6 +79,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 .btn-blue:hover{box-shadow:0 12px 28px rgba(0,87,153,0.34);}
 .btn-green{background:linear-gradient(135deg,#00923F,#22a35f);color:#fff;
   box-shadow:0 8px 20px rgba(0,146,63,0.24);}
+.btn-green:hover{box-shadow:0 12px 28px rgba(0,146,63,0.34);}
 .btn-outline{background:#fff;border:1.5px solid rgba(0,43,74,0.14);color:var(--sv-navy);}
 .btn-outline:hover{border-color:var(--sv-blue);color:var(--sv-blue);}
 .btn-wa{background:linear-gradient(135deg,#25D366,#1da851);color:#fff;
@@ -143,7 +144,6 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 .staff-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .staff-actions .btn{padding:10px 12px;font-size:12px;}
 
-/* Success popup */
 .success-popup{background:linear-gradient(135deg,#F0FFF4,#E8F5E9);
   border:1.5px solid rgba(0,146,63,0.30);border-radius:16px;
   padding:20px;margin-bottom:16px;text-align:center;}
@@ -170,7 +170,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 </head>
 <body>
 
-<!-- ===================== SCREEN 1: LOGIN ===================== -->
+<!-- SCREEN 1: LOGIN -->
 <div class="screen active" id="screen-login">
   <div class="header">
     <img src="./assets/logo.png" class="header-logo" alt=""
@@ -206,7 +206,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 2: DASHBOARD ===================== -->
+<!-- SCREEN 2: DASHBOARD -->
 <div class="screen" id="screen-dashboard">
   <div class="header">
     <img src="./assets/logo.png" class="header-logo" alt=""
@@ -273,7 +273,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 3: STAFF RECORDS ===================== -->
+<!-- SCREEN 3: STAFF RECORDS -->
 <div class="screen" id="screen-staff">
   <div class="header">
     <button class="header-btn" onclick="backDash()" title="Back">←</button>
@@ -308,7 +308,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 4: ADD STAFF ===================== -->
+<!-- SCREEN 4: ADD STAFF -->
 <div class="screen" id="screen-add-staff">
   <div class="header">
     <button class="header-btn" onclick="backStaff()" title="Back">←</button>
@@ -383,7 +383,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
         </div>
       </div>
 
-      <button class="btn btn-green" onclick="saveStaff()">
+      <button class="btn btn-green" id="btn-create-staff" onclick="saveStaff()">
         ✓ Create Staff Account
       </button>
 
@@ -395,7 +395,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 5: SUCCESS ===================== -->
+<!-- SCREEN 5: SUCCESS -->
 <div class="screen" id="screen-staff-success">
   <div class="header">
     <img src="./assets/logo.png" class="header-logo" alt=""
@@ -462,7 +462,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 
 <script>
 /* ============================================================
-   Principal Desk — With Staff Records
+   Principal Desk — With Staff Records (Fixed)
    ============================================================ */
 
 let FB = { ready: false, db: null, fs: null, auth: null };
@@ -628,45 +628,63 @@ function updatePinPreview() {
 }
 window.updatePinPreview = updatePinPreview;
 
+/* ========== SAVE STAFF (FIXED) ========== */
 async function saveStaff() {
+  console.log("🔵 saveStaff() called");
+
+  // Get form values
   const prefix = document.getElementById("s-prefix").value;
   const name = document.getElementById("s-name").value.trim();
   const phone = document.getElementById("s-phone").value.trim();
   const classCode = document.getElementById("s-class").value;
   const sectionCode = document.getElementById("s-section").value;
 
-  if (!prefix) return toast("Select prefix", "error");
-  if (!name) return toast("Enter name", "error");
-  if (!/^\d{10}$/.test(phone)) return toast("Enter 10-digit phone", "error");
+  console.log("Form data:", { prefix, name, phone, classCode, sectionCode, role: currentStaffRole });
+  console.log("FB.ready:", FB.ready, "FB.db:", !!FB.db);
 
+  // Validation
+  if (!prefix) { toast("Select prefix", "error"); return; }
+  if (!name) { toast("Enter name", "error"); return; }
+  if (!/^\d{10}$/.test(phone)) { toast("Enter 10-digit phone", "error"); return; }
   if (currentStaffRole === "teacher") {
-    if (!classCode) return toast("Select class", "error");
-    if (!sectionCode) return toast("Select section", "error");
+    if (!classCode) { toast("Select class", "error"); return; }
+    if (!sectionCode) { toast("Select section", "error"); return; }
   }
 
-  if (!FB.ready || !FB.db) return toast("Firebase not ready", "error");
+  // Firebase check
+  if (!FB.ready || !FB.db) {
+    toast("Firebase not ready — wait 5 seconds and try again", "error");
+    return;
+  }
 
   const pin = SV.calculatePIN(phone);
+  console.log("Generated PIN:", pin);
 
-  // Check duplicate phone
+  // Button reference (safe way — no event.target)
+  const btn = document.getElementById("btn-create-staff");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Creating...";
+  }
+
+  // Duplicate check
   try {
     const { collection, query, where, getDocs } = FB.fs;
     const staffRef = collection(FB.db, "staff");
     const q = query(staffRef, where("phone", "==", phone));
     const existing = await getDocs(q);
     if (!existing.empty) {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "✓ Create Staff Account";
+      }
       return toast("Phone number already registered", "error");
     }
   } catch (e) {
     console.warn("Duplicate check failed:", e);
   }
 
- const btn = document.querySelector('#screen-add-staff .btn-green');
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = "Creating...";
-  }
-
+  // Build staff data
   const staffData = {
     role: currentStaffRole,
     prefix: prefix,
@@ -682,23 +700,29 @@ async function saveStaff() {
     staffData.section = sectionCode;
   }
 
+  console.log("Saving staff:", staffData);
+
   try {
     const { collection, addDoc } = FB.fs;
     const staffRef = collection(FB.db, "staff");
     const docRef = await addDoc(staffRef, staffData);
 
+    console.log("✅ Saved to Firestore. Doc ID:", docRef.id);
+
     staffData.id = docRef.id;
     lastCreatedStaff = staffData;
 
-    // Show success screen with credentials
+    // Show success
     showStaffSuccess(staffData);
 
   } catch (e) {
-    console.error(e);
-    toast("Create failed: " + e.message, "error");
+    console.error("❌ Save error:", e);
+    toast("Create failed: " + (e.message || "Unknown error"), "error");
   } finally {
-    btn.disabled = false;
-    btn.textContent = "✓ Create Staff Account";
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "✓ Create Staff Account";
+    }
   }
 }
 window.saveStaff = saveStaff;
@@ -812,8 +836,6 @@ function loadStaffList() {
 }
 
 function shareStaffWA(staffId) {
-  // Reload staff list from DOM? Get from existing? Simple: fetch from snapshot — not ideal
-  // For now, use cached data from list. Better: fetch doc directly.
   if (!FB.ready || !FB.db) return;
   const { doc, getDoc } = FB.fs;
   getDoc(doc(FB.db, "staff", staffId)).then(snap => {
