@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#002B4A">
+<title>Valiass Setup — Sri Viswa School</title>
+<link rel="icon" type="image/png" href="./assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sv-navy:#002B4A;
+  --sv-blue:#005799;
+  --sv-bright-blue:#2E83C6;
+  --sv-green:#00923F;
+  --sv-gold:#E0A800;
+  --sv-gold-light:#FFC107;
+  --sv-red:#D32F2F;
+  --muted:#607789;
+  --border:rgba(0,43,74,0.10);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  min-height:100vh;
+  font-family:"Inter",sans-serif;
+  color:var(--sv-navy);
+  background:
+    radial-gradient(circle at 10% 10%,rgba(46,131,198,0.14),transparent 32%),
+    radial-gradient(circle at 90% 85%,rgba(0,146,63,0.09),transparent 30%),
+    linear-gradient(135deg,#FFFFFF 0%,#F4F8FC 55%,#EEF5FA 100%);
+  overflow-x:hidden;
+  padding-top:var(--safe-top);
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(0,43,74,0.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,43,74,0.028) 1px,transparent 1px);
+  background-size:32px 32px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* HEADER */
+.header{
+  background:#fff;
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid var(--border);
+  box-shadow:0 2px 10px rgba(0,43,74,0.04);
+  position:sticky;top:0;z-index:50;
+  padding-top:calc(14px + var(--safe-top));
+}
+.header-logo{
+  width:42px;height:42px;
+  object-fit:contain;border-radius:10px;background:#fff;padding:2px;
+}
+.header-logo-fb{
+  width:42px;height:42px;border-radius:10px;
+  background:linear-gradient(135deg,#E0A800,#FFC107);
+  color:#002B4A;font-weight:800;font-size:15px;
+  display:none;align-items:center;justify-content:center;
+}
+.header-info{flex:1;min-width:0;}
+.header-title{font-size:14px;font-weight:800;color:var(--sv-navy);line-height:1.1;}
+.header-sub{font-size:10px;font-weight:600;color:var(--sv-gold);letter-spacing:1.4px;text-transform:uppercase;margin-top:2px;}
+.header-btn{
+  background:rgba(0,87,153,0.08);border:none;width:36px;height:36px;border-radius:10px;
+  cursor:pointer;font-size:16px;color:var(--sv-navy);transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;text-decoration:none;
+}
+.header-btn:hover{background:rgba(0,87,153,0.15);}
+
+/* CONTAINER */
+.container{
+  flex:1;
+  max-width:520px;
+  width:100%;
+  margin:0 auto;
+  padding:32px 20px 40px;
+  position:relative;
+  z-index:2;
+}
+
+/* SCREEN */
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* HERO */
+.hero{text-align:center;padding:10px 0 24px;}
+.hero-icon{
+  width:80px;height:80px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#E0A800,#FFC107);
+  color:#002B4A;
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;
+  margin:0 auto 18px;
+  box-shadow:0 12px 28px rgba(224,168,0,0.32);
+  animation:fadeUp 0.5s ease both;
+}
+.hero h1{
+  font-family:"Playfair Display",serif;
+  font-size:26px;
+  font-weight:800;
+  line-height:1.2;
+  color:var(--sv-navy);
+  margin-bottom:8px;
+  animation:fadeUp 0.5s 0.05s ease both;
+}
+.hero p{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.6;
+  max-width:380px;
+  margin:0 auto;
+  animation:fadeUp 0.5s 0.1s ease both;
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:24px 22px;
+  box-shadow:0 8px 24px rgba(0,43,74,0.06);
+  margin-bottom:16px;
+  animation:fadeUp 0.5s 0.15s ease both;
+}
+.card-title{
+  display:flex;align-items:center;gap:9px;
+  font-size:15px;font-weight:800;color:var(--sv-navy);
+  margin-bottom:18px;
+}
+.card-title .dot{
+  width:8px;height:8px;border-radius:50%;background:var(--sv-gold);
+}
+
+/* FORM */
+.field{margin-bottom:16px;}
+.field-label{
+  display:block;font-size:10px;font-weight:800;
+  letter-spacing:1px;text-transform:uppercase;
+  color:var(--sv-blue);margin-bottom:6px;
+}
+.field-input,.field-select{
+  width:100%;padding:14px 16px;border-radius:12px;
+  border:1.5px solid rgba(0,43,74,0.12);background:#fff;
+  font-family:inherit;font-size:14px;color:var(--sv-navy);
+  transition:all 0.2s;
+}
+.field-input:focus,.field-select:focus{
+  outline:none;border-color:var(--sv-blue);
+  box-shadow:0 0 0 4px rgba(0,87,153,0.10);
+}
+.field-input.code-input{
+  letter-spacing:2px;
+  font-weight:700;
+  font-family:"SF Mono","Menlo",monospace;
+  text-align:center;
+  font-size:16px;
+}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* BUTTONS */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 22px;border-radius:12px;border:none;font-family:inherit;
+  font-size:13px;font-weight:800;letter-spacing:0.3px;cursor:pointer;
+  transition:all 0.25s;width:100%;text-decoration:none;
+}
+.btn:active{transform:scale(0.98);}
+.btn-primary{
+  background:linear-gradient(135deg,#E0A800,#FFC107);
+  color:#002B4A;
+  box-shadow:0 8px 20px rgba(224,168,0,0.28);
+}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(224,168,0,0.40);}
+.btn-blue{
+  background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));
+  color:#fff;
+  box-shadow:0 8px 20px rgba(0,87,153,0.22);
+}
+.btn-blue:hover{box-shadow:0 12px 28px rgba(0,87,153,0.34);}
+.btn-outline{
+  background:#fff;border:1.5px solid rgba(0,43,74,0.14);
+  color:var(--sv-navy);
+}
+.btn-outline:hover{border-color:var(--sv-blue);color:var(--sv-blue);}
+
+/* LOCK ICON */
+.lock-icon{
+  width:64px;height:64px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#002B4A,#124f6b);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+  margin:0 auto 20px;
+  box-shadow:0 10px 24px rgba(0,43,74,0.24);
+}
+
+/* SUCCESS SCREEN */
+.success-icon{
+  width:88px;height:88px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00923F,#22a35f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:44px;color:#fff;
+  margin:0 auto 22px;
+  box-shadow:0 12px 32px rgba(0,146,63,0.30);
+  animation:pop 0.5s cubic-bezier(.34,1.56,.64,1);
+}
+.success-title{
+  font-family:"Playfair Display",serif;
+  font-size:26px;font-weight:800;
+  color:var(--sv-navy);
+  text-align:center;
+  margin-bottom:10px;
+}
+.success-sub{
+  font-size:13px;color:var(--muted);
+  text-align:center;
+  line-height:1.6;
+  margin-bottom:24px;
+}
+
+/* INFO CARD */
+.info-card{
+  background:linear-gradient(135deg,#F4F8FC,#EEF5FA);
+  border:1px solid rgba(0,87,153,0.15);
+  border-radius:14px;
+  padding:16px 18px;
+  margin-bottom:20px;
+  font-size:12.5px;
+  line-height:1.7;
+}
+.info-card .label{
+  font-size:10px;font-weight:800;
+  letter-spacing:1px;text-transform:uppercase;
+  color:var(--sv-blue);
+  margin-bottom:8px;
+  display:block;
+}
+.info-card .value{
+  font-weight:800;
+  color:var(--sv-navy);
+  font-size:14px;
+  word-break:break-word;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  bottom:calc(20px + var(--safe-bottom));
+  left:50%;
+  transform:translate(-50%,140%);
+  background:var(--sv-navy);color:#fff;
+  padding:12px 22px;border-radius:50px;
+  font-size:12.5px;font-weight:700;
+  z-index:2000;
+  transition:transform 0.4s;
+  box-shadow:0 12px 30px rgba(0,43,74,0.4);
+  max-width:90vw;text-align:center;
+}
+.toast.show{transform:translate(-50%,0);}
+.toast.error{background:#C62828;}
+.toast.success{background:var(--sv-green);}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(14px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes pop{
+  from{opacity:0;transform:scale(0.5);}
+  to{opacity:1;transform:scale(1);}
+}
+
+@media (max-width:380px){
+  .field-row{grid-template-columns:1fr;}
+  .hero h1{font-size:22px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="./assets/logo.png" class="header-logo" alt=""
+       onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+  <div class="header-logo-fb">SV</div>
+  <div class="header-info">
+    <div class="header-title">Valiass Setup</div>
+    <div class="header-sub">Master Authority</div>
+  </div>
+  <a class="header-btn" href="./index.html" title="Home">🏠</a>
+</div>
+
+<div class="container">
+
+  <!-- ===================== SCREEN 1: MASTER CODE ===================== -->
+  <div class="screen active" id="screen-code">
+    <div class="hero">
+      <div class="lock-icon">🔒</div>
+      <h1>Master Access</h1>
+      <p>Enter the Valiass activation code to begin school setup.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Activation Code</div>
+
+      <div class="field">
+        <label class="field-label">Enter Code</label>
+        <input type="password" id="master-code" class="field-input code-input"
+               placeholder="• • • • • • • • • • • •"
+               autocomplete="off" spellcheck="false"
+               onkeydown="if(event.key==='Enter')verifyCode()">
+      </div>
+
+      <button class="btn btn-primary" onclick="verifyCode()">
+        → Verify & Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN 2: PRINCIPAL SETUP ===================== -->
+  <div class="screen" id="screen-setup">
+    <div class="hero">
+      <div class="hero-icon">👑</div>
+      <h1>Principal Setup</h1>
+      <p>Enter Principal details. This is a one-time setup.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Principal Details</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Prefix</label>
+          <select id="pr-prefix" class="field-select">
+            <option value="">Select</option>
+            <option>Mr.</option>
+            <option>Mrs.</option>
+            <option>Ms.</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Phone Number</label>
+          <input type="tel" id="pr-phone" class="field-input"
+                 placeholder="9876543210" maxlength="10"
+                 inputmode="numeric">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Full Name</label>
+        <input type="text" id="pr-name" class="field-input"
+               placeholder="e.g. K. Rama Krishna" maxlength="40">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Set 4-Digit PIN</label>
+        <input type="password" id="pr-pin" class="field-input code-input"
+               placeholder="• • • •" maxlength="4"
+               inputmode="numeric" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Confirm PIN</label>
+        <input type="password" id="pr-pin-confirm" class="field-input code-input"
+               placeholder="• • • •" maxlength="4"
+               inputmode="numeric" autocomplete="off"
+               onkeydown="if(event.key==='Enter')savePrincipal()">
+      </div>
+
+      <button class="btn btn-blue" onclick="savePrincipal()">
+        ✓ Create Principal
+      </button>
+
+      <button class="btn btn-outline" onclick="backToCode()" style="margin-top:10px;">
+        ← Back
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN 3: SUCCESS ===================== -->
+  <div class="screen" id="screen-success">
+    <div style="text-align:center;padding:20px 0 24px;">
+      <div class="success-icon">✓</div>
+      <h1 class="success-title">Setup Complete!</h1>
+      <p class="success-sub">
+        Principal account created successfully.<br>
+        You can now login as Principal and start managing the school.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--sv-green);"></span> Saved Details</div>
+
+      <div class="info-card">
+        <span class="label">Principal</span>
+        <span class="value" id="result-name">—</span>
+      </div>
+
+      <div class="info-card">
+        <span class="label">Phone</span>
+        <span class="value" id="result-phone">—</span>
+      </div>
+
+      <div class="info-card">
+        <span class="label">Login PIN</span>
+        <span class="value" id="result-pin">—</span>
+      </div>
+
+      <p style="font-size:11.5px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6;">
+        🔐 Keep your PIN safe. You'll use it every time you login.
+      </p>
+    </div>
+
+    <button class="btn btn-primary" onclick="goToPrincipal()">
+      → Go to Principal Login
+    </button>
+
+    <a class="btn btn-outline" href="./index.html" style="margin-top:10px;">
+      🏠 Back to Home
+    </a>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase -->
+<script src="./firebase-config.js"></script>
+<script src="./config.js"></script>
+<script src="./utils.js"></script>
+
+<script>
+/* ============================================================
+   Valiass Setup Logic
+   ============================================================ */
+
+let FB = { ready: false, db: null, fs: null };
+
+// Init Firebase (Firestore)
+(async function initFirebase() {
+  try {
+    if (!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey) {
+      console.warn("⚠️ Firebase config not found — running in offline mode");
+      return;
+    }
+    const [appMod, fsMod, authMod] = await Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js")
+    ]);
+    const app = appMod.initializeApp(window.FIREBASE_CONFIG);
+    FB.db = fsMod.getFirestore(app);
+    FB.fs = fsMod;
+    const auth = authMod.getAuth(app);
+    try { await authMod.signInAnonymously(auth); } catch(e) {}
+    FB.ready = true;
+    console.log("✅ Firebase ready");
+  } catch (e) {
+    console.warn("Firebase init failed:", e);
+  }
+})();
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+
+function toast(msg, type) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show" + (type ? " " + type : "");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove("show"), 2800);
+}
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ============================================================
+   SCREEN 1: VERIFY MASTER CODE
+   ============================================================ */
+
+function verifyCode() {
+  const input = document.getElementById("master-code").value.trim();
+
+  if (!input) {
+    return toast("Please enter the code", "error");
+  }
+
+  if (input !== SV_CONFIG.valiass.masterCode) {
+    return toast("Invalid activation code", "error");
+  }
+
+  toast("Code verified ✓", "success");
+  setTimeout(() => showScreen("screen-setup"), 400);
+}
+window.verifyCode = verifyCode;
+
+function backToCode() {
+  document.getElementById("master-code").value = "";
+  showScreen("screen-code");
+}
+window.backToCode = backToCode;
+
+/* ============================================================
+   SCREEN 2: SAVE PRINCIPAL
+   ============================================================ */
+
+async function savePrincipal() {
+  const prefix = document.getElementById("pr-prefix").value;
+  const name = document.getElementById("pr-name").value.trim();
+  const phone = document.getElementById("pr-phone").value.trim();
+  const pin = document.getElementById("pr-pin").value.trim();
+  const pinConfirm = document.getElementById("pr-pin-confirm").value.trim();
+
+  // Validation
+  if (!prefix) return toast("Select prefix (Mr./Mrs./Ms.)", "error");
+  if (!name) return toast("Enter full name", "error");
+  if (name.length < 3) return toast("Name too short", "error");
+  if (!phone) return toast("Enter phone number", "error");
+  if (!/^\d{10}$/.test(phone)) return toast("Enter 10-digit phone number", "error");
+  if (!pin) return toast("Set a 4-digit PIN", "error");
+  if (!/^\d{4}$/.test(pin)) return toast("PIN must be 4 digits", "error");
+  if (pin !== pinConfirm) return toast("PINs do not match", "error");
+
+  // Save data
+  const principalData = {
+    prefix: prefix,
+    name: name,
+    phone: phone,
+    pin: pin,
+    role: "principal",
+    setupAt: Date.now()
+  };
+
+  // Save to localStorage (immediate)
+  SV.saveLocal("svs_principal", principalData);
+  SV.saveLocal("svs_setup_done", true);
+
+  // Save to Firestore
+  if (FB.ready && FB.db) {
+    try {
+      const { doc, setDoc } = FB.fs;
+      await setDoc(doc(FB.db, "config", "master"), {
+        schoolSetup: true,
+        setupAt: Date.now(),
+        principal: principalData,
+        school: SV_CONFIG.school
+      });
+      console.log("✅ Principal saved to Firestore");
+    } catch (e) {
+      console.warn("Firestore save failed (offline mode):", e);
+    }
+  }
+
+  // Show success screen
+  document.getElementById("result-name").textContent = `${prefix} ${name}`;
+  document.getElementById("result-phone").textContent = phone;
+  document.getElementById("result-pin").textContent = pin;
+
+  toast("Setup complete ✓", "success");
+  setTimeout(() => showScreen("screen-success"), 500);
+}
+window.savePrincipal = savePrincipal;
+
+/* ============================================================
+   SCREEN 3: GO TO PRINCIPAL LOGIN
+   ============================================================ */
+
+function goToPrincipal() {
+  window.location.href = "./principal.html";
+}
+window.goToPrincipal = goToPrincipal;
+
+/* ============================================================
+   AUTO-CHECK: Already setup?
+   ============================================================ */
+
+(async function autoCheck() {
+  // Check localStorage first
+  const setupDone = SV.loadLocal("svs_setup_done", false);
+
+  if (setupDone) {
+    // Already setup — redirect to principal login
+    // (or show message)
+    setTimeout(() => {
+      if (confirm("Setup is already complete. Go to Principal Login?")) {
+        window.location.href = "./principal.html";
+      }
+    }, 500);
+  }
+
+  console.log("✅ setup.html loaded");
+})();
+</script>
+
+</body>
+</html>
