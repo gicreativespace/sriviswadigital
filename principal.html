@@ -661,9 +661,11 @@ async function saveStaff() {
     console.warn("Duplicate check failed:", e);
   }
 
-  const btn = event.target;
-  btn.disabled = true;
-  btn.textContent = "Creating...";
+ const btn = document.querySelector('#screen-add-staff .btn-green');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Creating...";
+  }
 
   const staffData = {
     role: currentStaffRole,
