@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#002B4A">
+<title>Parent App — Sri Viswa School</title>
+<link rel="icon" type="image/png" href="./assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sv-navy:#002B4A;--sv-blue:#005799;--sv-bright-blue:#2E83C6;
+  --sv-green:#00923F;--sv-gold:#E0A800;--sv-gold-light:#FFC107;
+  --sv-red:#D32F2F;
+  --muted:#607789;--border:rgba(0,43,74,0.10);
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
+  background:radial-gradient(circle at 10% 10%,rgba(46,131,198,0.12),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(0,146,63,0.07),transparent 28%),
+    linear-gradient(135deg,#FFFFFF 0%,#F4F8FC 50%,#EEF5FA 100%);
+  overflow-x:hidden;padding-top:var(--safe-top);}
+
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* HEADER */
+.header{background:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border);box-shadow:0 2px 10px rgba(0,43,74,0.04);
+  position:sticky;top:0;z-index:50;padding-top:calc(14px + var(--safe-top));}
+.header-logo{width:42px;height:42px;object-fit:contain;border-radius:10px;background:#fff;padding:2px;}
+.header-logo-fb{width:42px;height:42px;border-radius:10px;
+  background:linear-gradient(135deg,#2E83C6,#005799);color:#fff;font-weight:800;font-size:15px;
+  display:none;align-items:center;justify-content:center;}
+.header-info{flex:1;min-width:0;}
+.header-title{font-size:14px;font-weight:800;color:var(--sv-navy);line-height:1.1;}
+.header-sub{font-size:10px;font-weight:600;color:var(--sv-blue);letter-spacing:1.4px;text-transform:uppercase;margin-top:2px;}
+.header-btn{background:rgba(0,87,153,0.08);border:none;width:36px;height:36px;border-radius:10px;
+  cursor:pointer;font-size:16px;color:var(--sv-navy);transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;text-decoration:none;}
+.header-btn:hover{background:rgba(0,87,153,0.15);}
+
+/* CONTAINER */
+.container{flex:1;max-width:600px;width:100%;margin:0 auto;padding:24px 20px 40px;}
+
+/* HERO */
+.hero{text-align:center;padding:20px 0 16px;}
+.hero h1{font-family:"Playfair Display",serif;font-size:30px;line-height:1.1;
+  background:linear-gradient(135deg,var(--sv-navy),var(--sv-blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px;}
+.hero p{font-size:13px;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto;}
+
+/* CARD */
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;
+  box-shadow:0 8px 24px rgba(0,43,74,0.06);margin-bottom:16px;}
+.card-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:800;color:var(--sv-navy);margin-bottom:16px;}
+.card-title .dot{width:8px;height:8px;border-radius:50%;background:var(--sv-green);}
+
+/* FORM */
+.field{margin-bottom:14px;}
+.field-label{display:block;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--sv-blue);margin-bottom:6px;}
+.field-input,.field-select{width:100%;padding:13px 15px;border-radius:12px;
+  border:1.5px solid rgba(0,43,74,0.12);background:#fff;
+  font-family:inherit;font-size:14px;color:var(--sv-navy);transition:all 0.2s;}
+.field-input:focus,.field-select:focus{outline:none;border-color:var(--sv-blue);box-shadow:0 0 0 4px rgba(0,87,153,0.10);}
+.field-input.code-input{letter-spacing:6px;text-align:center;font-size:18px;font-weight:700;font-family:"SF Mono",monospace;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 22px;border-radius:12px;border:none;font-family:inherit;
+  font-size:13px;font-weight:800;letter-spacing:0.3px;cursor:pointer;
+  transition:all 0.25s;width:100%;text-decoration:none;}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));color:#fff;
+  box-shadow:0 8px 20px rgba(0,87,153,0.22);}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(0,87,153,0.34);}
+.btn-green{background:linear-gradient(135deg,#00923F,#22a35f);color:#fff;
+  box-shadow:0 8px 20px rgba(0,146,63,0.24);}
+.btn-green:hover{box-shadow:0 12px 28px rgba(0,146,63,0.34);}
+.btn-outline{background:#fff;border:1.5px solid rgba(0,43,74,0.14);color:var(--sv-navy);}
+.btn-outline:hover{border-color:var(--sv-blue);color:var(--sv-blue);}
+.btn-danger{background:#fff;border:1.5px solid rgba(211,47,47,0.35);color:var(--sv-red);}
+.btn-danger:hover{background:rgba(211,47,47,0.06);border-color:var(--sv-red);}
+
+/* KIDS LIST */
+.kid-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:18px;
+  display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.25s;
+  margin-bottom:12px;}
+.kid-card:hover{border-color:var(--sv-blue);transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(0,43,74,0.10);}
+.kid-avatar{width:56px;height:56px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));
+  color:#fff;font-weight:800;font-size:22px;
+  display:flex;align-items:center;justify-content:center;}
+.kid-info{flex:1;min-width:0;}
+.kid-name{font-size:15px;font-weight:800;color:var(--sv-navy);margin-bottom:3px;}
+.kid-meta{font-size:11.5px;color:var(--muted);font-weight:500;}
+.kid-arrow{color:var(--sv-blue);font-size:20px;}
+
+/* STUDENT PROFILE */
+.student-profile{background:linear-gradient(135deg,#002B4A 0%,#124f6b 100%);
+  color:#fff;border-radius:20px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden;}
+.student-profile::before{content:"";position:absolute;top:-30px;right:-30px;
+  width:140px;height:140px;border-radius:50%;background:rgba(255,193,7,0.10);}
+.sp-inner{display:flex;align-items:center;gap:16px;position:relative;z-index:2;}
+.sp-photo{width:72px;height:72px;border-radius:16px;flex-shrink:0;
+  background:linear-gradient(135deg,#FFC107,#E0A800);
+  display:flex;align-items:center;justify-content:center;font-size:30px;
+  font-weight:800;color:#002B4A;border:2px solid rgba(255,255,255,0.3);}
+.sp-info{flex:1;min-width:0;}
+.sp-name{font-family:"Playfair Display",serif;font-size:20px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:4px;}
+.sp-class{font-size:12px;font-weight:700;color:var(--sv-gold-light);letter-spacing:1px;text-transform:uppercase;}
+.sp-meta{display:flex;gap:14px;margin-top:8px;font-size:11px;color:rgba(255,255,255,0.75);flex-wrap:wrap;}
+.sp-meta span{display:flex;align-items:center;gap:4px;}
+
+/* TILES */
+.tiles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.tile{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 8px;
+  text-align:center;cursor:pointer;transition:all 0.22s;}
+.tile:hover{transform:translateY(-3px);border-color:var(--sv-blue);
+  box-shadow:0 10px 22px rgba(0,43,74,0.10);}
+.tile-icon{width:40px;height:40px;margin:0 auto 8px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;}
+.tile-icon.blue{background:linear-gradient(135deg,#005799,#002B4A);}
+.tile-icon.green{background:linear-gradient(135deg,#00923F,#22a35f);}
+.tile-icon.gold{background:linear-gradient(135deg,#FFC107,#E0A800);color:#002B4A;}
+.tile-icon.red{background:linear-gradient(135deg,#dc3545,#b02a37);}
+.tile-icon.purple{background:linear-gradient(135deg,#6f42c1,#8250df);}
+.tile-icon.bright{background:linear-gradient(135deg,#2E83C6,#005799);}
+.tile-label{font-size:10.5px;font-weight:700;color:var(--sv-navy);line-height:1.2;}
+
+/* SECTION */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.section-head h3{font-size:14px;font-weight:800;color:var(--sv-navy);display:flex;align-items:center;gap:8px;}
+.section-head .badge{background:rgba(0,146,63,0.12);color:var(--sv-green);font-size:10px;
+  font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:0.5px;}
+
+.empty{padding:32px 20px;text-align:center;color:var(--muted);}
+.empty .ico{font-size:36px;opacity:0.4;margin-bottom:10px;}
+.empty p{font-size:12px;font-weight:600;}
+
+/* VERIFY SCREEN */
+.verify-icon{width:72px;height:72px;border-radius:50%;
+  background:linear-gradient(135deg,#005799,#002B4A);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;color:#fff;margin:0 auto 16px;
+  box-shadow:0 10px 24px rgba(0,87,153,0.24);}
+
+.partial-name{font-family:"Playfair Display",serif;font-size:22px;font-weight:800;
+  color:var(--sv-navy);text-align:center;margin-bottom:6px;letter-spacing:2px;}
+.partial-code{text-align:center;font-size:12px;font-weight:700;color:var(--sv-blue);
+  letter-spacing:2px;margin-bottom:16px;}
+
+.attempts-info{font-size:11.5px;color:var(--sv-red);font-weight:700;
+  text-align:center;margin-top:12px;display:none;}
+.attempts-info.show{display:block;}
+
+/* FOOTER */
+.footer{text-align:center;padding:24px 20px calc(24px + var(--safe-bottom));
+  border-top:1px solid var(--border);font-size:11px;color:var(--muted);margin-top:auto;}
+.footer strong{color:var(--sv-blue);font-weight:800;}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(20px + var(--safe-bottom));left:50%;
+  transform:translate(-50%,140%);background:var(--sv-navy);color:#fff;
+  padding:12px 22px;border-radius:50px;font-size:12.5px;font-weight:700;
+  z-index:2000;transition:transform 0.4s;box-shadow:0 12px 30px rgba(0,43,74,0.4);
+  max-width:90vw;text-align:center;}
+.toast.show{transform:translate(-50%,0);}
+.toast.error{background:#C62828;}
+.toast.success{background:var(--sv-green);}
+
+@media (max-width:480px){
+  .tiles-grid{grid-template-columns:repeat(3,1fr);}
+  .sp-photo{width:64px;height:64px;font-size:26px;}
+  .sp-name{font-size:17px;}
+  .hero h1{font-size:26px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== SCREEN 1: REGISTER ===================== -->
+<div class="screen active" id="screen-register">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Parent App</div>
+      <div class="header-sub">Sri Viswa School</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home">🏠</a>
+  </div>
+  <div class="container">
+
+    <div class="hero">
+      <h1>Welcome! 👋</h1>
+      <p>Register your child to view diary, notices, attendance, marks and more.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Register Your Child</div>
+
+      <div class="field">
+        <label class="field-label">Class</label>
+        <select id="reg-class" class="field-select">
+          <option value="">Select Class</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Section</label>
+        <select id="reg-section" class="field-select">
+          <option value="">Select Section</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Roll Number</label>
+        <input type="text" id="reg-roll" class="field-input code-input"
+               placeholder="01" maxlength="2" inputmode="numeric"
+               autocomplete="off">
+      </div>
+
+      <button class="btn btn-primary" onclick="findChild()">
+        🔍 Find My Child
+      </button>
+
+      <p style="font-size:11px;color:var(--muted);margin-top:14px;text-align:center;line-height:1.6;">
+        You can add more children later from your dashboard.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SCREEN 2: VERIFY DOB ===================== -->
+<div class="screen" id="screen-verify">
+  <div class="header">
+    <button class="header-btn" onclick="backToRegister()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title">Verify Identity</div>
+      <div class="header-sub">Security Check</div>
+    </div>
+  </div>
+  <div class="container">
+
+    <div style="text-align:center;padding:20px 0 24px;">
+      <div class="verify-icon">🔐</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;
+                 color:var(--sv-navy);margin-bottom:6px;">
+        Verify Child
+      </h1>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;">
+        Enter your child's Date of Birth to confirm.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--sv-gold);"></span> Student Found</div>
+
+      <div class="partial-name" id="partial-name">S _ _ _ _ _</div>
+      <div class="partial-code" id="partial-code">CODE: 06A01</div>
+
+      <div class="field">
+        <label class="field-label">Child's Date of Birth</label>
+        <input type="date" id="verify-dob" class="field-input">
+      </div>
+
+      <button class="btn btn-green" onclick="verifyDOB()">
+        ✓ Verify & Add
+      </button>
+
+      <button class="btn btn-outline" onclick="backToRegister()" style="margin-top:10px;">
+        ← Try Again
+      </button>
+
+      <div class="attempts-info" id="attempts-info"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SCREEN 3: KIDS LIST ===================== -->
+<div class="screen" id="screen-kids">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Welcome Back! 👋</div>
+      <div class="header-sub">Choose Child</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home">🏠</a>
+  </div>
+  <div class="container">
+    <div id="kids-list"></div>
+
+    <button class="btn btn-outline" onclick="showRegister()" style="margin-top:8px;">
+      ➕ Add Another Child
+    </button>
+
+    <button class="btn btn-danger" onclick="resetData()" style="margin-top:10px;">
+      🔄 Reset Data — Start Fresh
+    </button>
+  </div>
+  <div class="footer">
+    <div>An initiative of <strong>@VALIASS</strong> team</div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN 4: DASHBOARD ===================== -->
+<div class="screen" id="screen-dashboard">
+  <div class="header">
+    <button class="header-btn" onclick="showKidsList()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title">Parent Dashboard</div>
+      <div class="header-sub" id="dash-sub">Student</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home">🏠</a>
+  </div>
+  <div class="container">
+
+    <div class="student-profile" id="student-profile"></div>
+
+    <div class="tiles-grid">
+      <div class="tile" onclick="comingSoon('E-Diary')">
+        <div class="tile-icon blue">📔</div>
+        <div class="tile-label">E-Diary</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Notices')">
+        <div class="tile-icon red">📢</div>
+        <div class="tile-label">Notices</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Attendance')">
+        <div class="tile-icon green">✅</div>
+        <div class="tile-label">Attend.</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Marks')">
+        <div class="tile-icon gold">📊</div>
+        <div class="tile-label">Marks</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Timetable')">
+        <div class="tile-icon blue">📅</div>
+        <div class="tile-label">Timetable</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Fees')">
+        <div class="tile-icon gold">💰</div>
+        <div class="tile-label">Fees</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Leave')">
+        <div class="tile-icon purple">📝</div>
+        <div class="tile-label">Leave</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Events')">
+        <div class="tile-icon green">🎉</div>
+        <div class="tile-label">Events</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">
+        <h3>📔 Recent E-Diary</h3>
+        <span class="badge" id="diary-count">0</span>
+      </div>
+      <div id="diary-list">
+        <div class="empty"><div class="ico">📭</div><p>No diary entries yet</p></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">
+        <h3>📢 Announcements</h3>
+        <span class="badge" id="ann-count">0</span>
+      </div>
+      <div id="ann-list">
+        <div class="empty"><div class="ico">📭</div><p>No announcements yet</p></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="footer">
+    <div>An initiative of <strong>@VALIASS</strong> team</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase + Config + Utils -->
+<script src="./firebase-config.js"></script>
+<script src="./config.js"></script>
+<script src="./utils.js"></script>
+
+<script>
+/* ============================================================
+   Parent App Logic
+   ============================================================ */
+
+let FB = { ready: false, db: null, fs: null, auth: null };
+let currentKid = null;       // Currently selected child
+let pendingKid = null;       // Child being verified (before DOB)
+let dobAttempts = 0;         // DOB verification attempts
+
+/* ========== FIREBASE INIT ========== */
+(async function initFirebase() {
+  try {
+    if (!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey) return;
+    const [appMod, fsMod, authMod] = await Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js")
+    ]);
+    const app = appMod.initializeApp(window.FIREBASE_CONFIG);
+    FB.db = fsMod.getFirestore(app);
+    FB.fs = fsMod;
+    FB.auth = authMod.getAuth(app);
+    try { await authMod.signInAnonymously(FB.auth); } catch(e) {}
+    FB.ready = true;
+    console.log("✅ Firebase ready");
+  } catch (e) {
+    console.warn("Firebase init failed:", e);
+  }
+})();
+
+/* ========== HELPERS ========== */
+function toast(msg, type) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show" + (type ? " " + type : "");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove("show"), 2800);
+}
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({ top: 0 });
+}
+
+function comingSoon(name) { toast("Coming soon: " + name); }
+window.comingSoon = comingSoon;
+
+/* ========== CLASS/SECTION DROPDOWNS ========== */
+function populateDropdowns() {
+  const classSelect = document.getElementById("reg-class");
+  const sectionSelect = document.getElementById("reg-section");
+
+  // Add classes
+  SV_CONFIG.classes.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.code;
+    opt.textContent = c.display;
+    classSelect.appendChild(opt);
+  });
+
+  // Add sections
+  SV_CONFIG.sections.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s.code;
+    opt.textContent = s.display;
+    sectionSelect.appendChild(opt);
+  });
+}
+
+/* ========== REGISTER — FIND CHILD ========== */
+async function findChild() {
+  const classCode = document.getElementById("reg-class").value;
+  const sectionCode = document.getElementById("reg-section").value;
+  const roll = document.getElementById("reg-roll").value.trim();
+
+  if (!classCode) return toast("Select class", "error");
+  if (!sectionCode) return toast("Select section", "error");
+  if (!roll) return toast("Enter roll number", "error");
+  if (!/^\d{1,2}$/.test(roll)) return toast("Roll number must be 1-99", "error");
+
+  const rollPadded = String(parseInt(roll, 10)).padStart(2, "0");
+  const studentCode = SV.buildStudentCode(classCode, sectionCode, rollPadded);
+
+  if (!FB.ready || !FB.db) {
+    return toast("Firebase not ready. Try again.", "error");
+  }
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = "Searching...";
+
+  try {
+    const { doc, getDoc } = FB.fs;
+    const snap = await getDoc(doc(FB.db, "students", studentCode));
+
+    if (!snap.exists()) {
+      toast("Student not found. Contact school office.", "error");
+      btn.disabled = false;
+      btn.textContent = "🔍 Find My Child";
+      return;
+    }
+
+    const student = snap.data();
+
+    // Already added?
+    const kids = SV.loadLocal("svs_parent_kids_v1", []);
+    if (kids.find(k => k.code === studentCode)) {
+      toast("This child is already registered", "error");
+      btn.disabled = false;
+      btn.textContent = "🔍 Find My Child";
+      return;
+    }
+
+    // Store pending kid for DOB verification
+    pendingKid = {
+      code: studentCode,
+      class: student.class || classCode,
+      section: student.section || sectionCode,
+      roll: student.roll || parseInt(rollPadded, 10),
+      name: student.name || "",
+      dob: student.dob || ""
+    };
+
+    // Show partial name
+    const partial = buildPartialName(pendingKid.name);
+    document.getElementById("partial-name").textContent = partial;
+    document.getElementById("partial-code").textContent = "CODE: " + studentCode;
+
+    dobAttempts = 0;
+    document.getElementById("verify-dob").value = "";
+    document.getElementById("attempts-info").classList.remove("show");
+
+    showScreen("screen-verify");
+    setTimeout(() => document.getElementById("verify-dob").focus(), 400);
+
+  } catch (e) {
+    console.error(e);
+    toast("Search failed: " + e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "🔍 Find My Child";
+  }
+}
+window.findChild = findChild;
+
+function buildPartialName(fullName) {
+  if (!fullName) return "S _ _ _ _ _";
+  const parts = fullName.split(" ");
+  return parts.map(p => {
+    if (!p) return "";
+    const first = p.charAt(0);
+    const rest = "_".repeat(Math.max(0, p.length - 1));
+    return first + rest;
+  }).join(" ");
+}
+
+/* ========== VERIFY DOB ========== */
+async function verifyDOB() {
+  if (!pendingKid) return toast("No child selected", "error");
+
+  const inputDOB = document.getElementById("verify-dob").value;
+  if (!inputDOB) return toast("Enter Date of Birth", "error");
+
+  const normalized = SV.normalizeDOB(inputDOB);
+  if (!normalized) return toast("Invalid date format", "error");
+
+  const storedDOB = SV.normalizeDOB(pendingKid.dob);
+
+  if (normalized === storedDOB) {
+    // ✅ Match — Add child
+    const kid = {
+      code: pendingKid.code,
+      name: pendingKid.name,
+      class: pendingKid.class,
+      section: pendingKid.section,
+      roll: pendingKid.roll,
+      dob: pendingKid.dob,
+      addedAt: Date.now()
+    };
+
+    const kids = SV.loadLocal("svs_parent_kids_v1", []);
+    kids.push(kid);
+    SV.saveLocal("svs_parent_kids_v1", kids);
+
+    toast("Child added ✓", "success");
+    pendingKid = null;
+    dobAttempts = 0;
+
+    setTimeout(() => showKidsList(), 600);
+  } else {
+    // ❌ Mismatch
+    dobAttempts++;
+    const attemptsInfo = document.getElementById("attempts-info");
+
+    if (dobAttempts >= 3) {
+      attemptsInfo.textContent = "❌ 3 attempts failed. Please contact school office.";
+      attemptsInfo.classList.add("show");
+      toast("Contact school office", "error");
+    } else {
+      const remaining = 3 - dobAttempts;
+      attemptsInfo.textContent = `❌ Incorrect DOB. ${remaining} attempt${remaining !== 1 ? "s" : ""} remaining.`;
+      attemptsInfo.classList.add("show");
+      toast("Incorrect Date of Birth", "error");
+    }
+
+    document.getElementById("verify-dob").value = "";
+  }
+}
+window.verifyDOB = verifyDOB;
+
+function backToRegister() {
+  pendingKid = null;
+  dobAttempts = 0;
+  document.getElementById("reg-class").value = "";
+  document.getElementById("reg-section").value = "";
+  document.getElementById("reg-roll").value = "";
+  showScreen("screen-register");
+}
+window.backToRegister = backToRegister;
+
+/* ========== KIDS LIST ========== */
+function showKidsList() {
+  const kids = SV.loadLocal("svs_parent_kids_v1", []);
+
+  if (kids.length === 0) {
+    showRegister();
+    return;
+  }
+
+  const list = document.getElementById("kids-list");
+  list.innerHTML = kids.map((k, i) => `
+    <div class="kid-card" onclick="openDashboard(${i})">
+      <div class="kid-avatar">${SV.escapeHtml(k.name.charAt(0).toUpperCase())}</div>
+      <div class="kid-info">
+        <div class="kid-name">${SV.escapeHtml(k.name)}</div>
+        <div class="kid-meta">
+          ${SV.getClassNameByCode(k.class)} · Section ${SV.getSectionNameByCode(k.section)} · Roll ${k.roll}
+        </div>
+      </div>
+      <div class="kid-arrow">→</div>
+    </div>
+  `).join("");
+
+  showScreen("screen-kids");
+}
+window.showKidsList = showKidsList;
+
+function showRegister() {
+  document.getElementById("reg-class").value = "";
+  document.getElementById("reg-section").value = "";
+  document.getElementById("reg-roll").value = "";
+  showScreen("screen-register");
+}
+window.showRegister = showRegister;
+
+/* ========== DASHBOARD ========== */
+function openDashboard(index) {
+  const kids = SV.loadLocal("svs_parent_kids_v1", []);
+  currentKid = kids[index];
+
+  if (!currentKid) return toast("Child not found", "error");
+
+  // Sub-header
+  document.getElementById("dash-sub").textContent =
+    `${SV.getClassNameByCode(currentKid.class)} · Section ${SV.getSectionNameByCode(currentKid.section)}`;
+
+  // Profile card
+  const initial = currentKid.name.charAt(0).toUpperCase();
+  document.getElementById("student-profile").innerHTML = `
+    <div class="sp-inner">
+      <div class="sp-photo">${SV.escapeHtml(initial)}</div>
+      <div class="sp-info">
+        <div class="sp-name">${SV.escapeHtml(currentKid.name)}</div>
+        <div class="sp-class">${SV.getClassNameByCode(currentKid.class)} - ${SV.getSectionNameByCode(currentKid.section)}</div>
+        <div class="sp-meta">
+          <span>🎫 ${currentKid.code}</span>
+          <span>🔢 Roll ${currentKid.roll}</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Load diary + announcements
+  loadDiary();
+  loadAnnouncements();
+
+  showScreen("screen-dashboard");
+}
+window.openDashboard = openDashboard;
+
+/* ========== LOAD DIARY ========== */
+async function loadDiary() {
+  const listEl = document.getElementById("diary-list");
+  const countEl = document.getElementById("diary-count");
+
+  if (!FB.ready || !FB.db || !currentKid) {
+    countEl.textContent = "0";
+    return;
+  }
+
+  try {
+    const { collection, query, where, getDocs } = FB.fs;
+    const classKey = `${currentKid.class}-${currentKid.section}`;
+
+    const jobsRef = collection(FB.db, "jobs");
+    const q = query(
+      jobsRef,
+      where("type", "==", "ediary"),
+      where("className", "==", classKey),
+      where("status", "==", "approved")
+    );
+
+    const snap = await getDocs(q);
+    const items = [];
+    snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+    items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    const recent = items.slice(0, 3);
+
+    countEl.textContent = recent.length;
+
+    if (recent.length === 0) {
+      listEl.innerHTML = '<div class="empty"><div class="ico">📭</div><p>No diary entries yet</p></div>';
+      return;
+    }
+
+    listEl.innerHTML = recent.map(j => {
+      const d = j.data || {};
+      const subjects = d.subjects || {};
+      const lines = [];
+      Object.keys(subjects).forEach(k => {
+        const v = (subjects[k] || "").trim();
+        if (v) lines.push(`• ${k}: ${v}`);
+      });
+      const body = lines.join("\n") || "—";
+      return `
+        <div style="border-left:4px solid var(--sv-blue);background:#F8FBFF;
+                    border-radius:12px;padding:14px 16px;margin-bottom:10px;">
+          <div style="font-size:10.5px;font-weight:800;color:var(--sv-blue);
+                      letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px;">
+            📅 ${SV.prettyDate(j.date)} · 👩‍🏫 ${SV.escapeHtml(j.teacherName || "Teacher")}
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.6;white-space:pre-wrap;">
+            ${SV.escapeHtml(body)}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+  } catch (e) {
+    console.warn("Diary load failed:", e);
+    countEl.textContent = "0";
+  }
+}
+
+/* ========== LOAD ANNOUNCEMENTS ========== */
+async function loadAnnouncements() {
+  const listEl = document.getElementById("ann-list");
+  const countEl = document.getElementById("ann-count");
+
+  if (!FB.ready || !FB.db || !currentKid) {
+    countEl.textContent = "0";
+    return;
+  }
+
+  try {
+    const { collection, query, where, getDocs } = FB.fs;
+    const classKey = `${currentKid.class}-${currentKid.section}`;
+
+    const jobsRef = collection(FB.db, "jobs");
+    const q = query(
+      jobsRef,
+      where("type", "==", "announce"),
+      where("status", "==", "approved")
+    );
+
+    const snap = await getDocs(q);
+    const items = [];
+    snap.forEach(d => {
+      const j = { id: d.id, ...d.data() };
+      // Filter: school-wide OR own class
+      if (!j.className || j.className === "" || j.className === classKey) {
+        items.push(j);
+      }
+    });
+    items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    const recent = items.slice(0, 3);
+
+    countEl.textContent = recent.length;
+
+    if (recent.length === 0) {
+      listEl.innerHTML = '<div class="empty"><div class="ico">📭</div><p>No announcements yet</p></div>';
+      return;
+    }
+
+    listEl.innerHTML = recent.map(j => {
+      const d = j.data || {};
+      return `
+        <div style="border-left:4px solid var(--sv-gold);background:#FFF9E6;
+                    border-radius:12px;padding:14px 16px;margin-bottom:10px;">
+          <div style="font-size:13px;font-weight:800;color:var(--sv-navy);margin-bottom:4px;">
+            📢 ${SV.escapeHtml(d.content || "Announcement")}
+          </div>
+          <div style="font-size:10.5px;color:var(--muted);font-weight:600;margin-bottom:6px;">
+            📅 ${SV.prettyDate(j.date)} · ${j.className ? "Class " + j.className : "School-wide"}
+          </div>
+          ${d.details ? `<div style="font-size:11.5px;color:var(--muted);line-height:1.5;">
+            ${SV.escapeHtml(d.details)}</div>` : ""}
+        </div>
+      `;
+    }).join("");
+
+  } catch (e) {
+    console.warn("Announcements load failed:", e);
+    countEl.textContent = "0";
+  }
+}
+
+/* ========== RESET DATA ========== */
+function resetData() {
+  if (!confirm("Reset all data?\n\nThis will remove all registered children from this device.\nYou can add them again with DOB verification.\n\nAre you sure?")) {
+    return;
+  }
+  SV.clearLocal("svs_parent_kids_v1");
+  toast("Data cleared ✓", "success");
+  setTimeout(() => showRegister(), 500);
+}
+window.resetData = resetData;
+
+/* ========== INIT ========== */
+(function init() {
+  populateDropdowns();
+
+  const kids = SV.loadLocal("svs_parent_kids_v1", []);
+  if (kids.length > 0) {
+    showKidsList();
+  } else {
+    showRegister();
+  }
+
+  console.log("✅ parent.html loaded");
+})();
+</script>
+
+</body>
+</html>
