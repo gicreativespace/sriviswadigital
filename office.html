@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#002B4A">
+<title>Office Desk — Sri Viswa School</title>
+<link rel="icon" type="image/png" href="./assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sv-navy:#002B4A;--sv-blue:#005799;--sv-bright-blue:#2E83C6;
+  --sv-green:#00923F;--sv-gold:#E0A800;--sv-gold-light:#FFC107;
+  --sv-red:#D32F2F;
+  --muted:#607789;--border:rgba(0,43,74,0.10);
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
+  background:radial-gradient(circle at 10% 10%,rgba(46,131,198,0.12),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(0,146,63,0.07),transparent 28%),
+    linear-gradient(135deg,#FFFFFF 0%,#F4F8FC 50%,#EEF5FA 100%);
+  overflow-x:hidden;padding-top:var(--safe-top);}
+
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* HEADER */
+.header{background:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border);box-shadow:0 2px 10px rgba(0,43,74,0.04);
+  position:sticky;top:0;z-index:50;padding-top:calc(14px + var(--safe-top));}
+.header-logo{width:42px;height:42px;object-fit:contain;border-radius:10px;background:#fff;padding:2px;}
+.header-logo-fb{width:42px;height:42px;border-radius:10px;
+  background:linear-gradient(135deg,#00923F,#22a35f);color:#fff;font-weight:800;font-size:15px;
+  display:none;align-items:center;justify-content:center;}
+.header-info{flex:1;min-width:0;}
+.header-title{font-size:14px;font-weight:800;color:var(--sv-navy);line-height:1.1;}
+.header-sub{font-size:10px;font-weight:600;color:var(--sv-green);letter-spacing:1.4px;text-transform:uppercase;margin-top:2px;}
+.header-btn{background:rgba(0,87,153,0.08);border:none;width:36px;height:36px;border-radius:10px;
+  cursor:pointer;font-size:16px;color:var(--sv-navy);transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;text-decoration:none;}
+.header-btn:hover{background:rgba(0,87,153,0.15);}
+
+/* CONTAINER */
+.container{flex:1;max-width:640px;width:100%;margin:0 auto;padding:24px 20px 40px;}
+
+/* HERO */
+.hero{text-align:center;padding:20px 0 16px;}
+.hero h1{font-family:"Playfair Display",serif;font-size:30px;line-height:1.1;
+  background:linear-gradient(135deg,var(--sv-green),var(--sv-navy));
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px;}
+.hero p{font-size:13px;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto;}
+
+/* CARD */
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;
+  box-shadow:0 8px 24px rgba(0,43,74,0.06);margin-bottom:16px;}
+.card-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:800;color:var(--sv-navy);margin-bottom:16px;}
+.card-title .dot{width:8px;height:8px;border-radius:50%;background:var(--sv-green);}
+
+/* FORM */
+.field{margin-bottom:14px;}
+.field-label{display:block;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--sv-blue);margin-bottom:6px;}
+.field-input,.field-select,.field-textarea{width:100%;padding:13px 15px;border-radius:12px;
+  border:1.5px solid rgba(0,43,74,0.12);background:#fff;
+  font-family:inherit;font-size:14px;color:var(--sv-navy);transition:all 0.2s;}
+.field-input:focus,.field-select:focus,.field-textarea:focus{outline:none;border-color:var(--sv-blue);box-shadow:0 0 0 4px rgba(0,87,153,0.10);}
+.field-textarea{resize:vertical;min-height:80px;line-height:1.5;font-family:inherit;}
+.field-input.code-input{letter-spacing:6px;text-align:center;font-size:18px;font-weight:700;font-family:"SF Mono",monospace;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 22px;border-radius:12px;border:none;font-family:inherit;
+  font-size:13px;font-weight:800;letter-spacing:0.3px;cursor:pointer;
+  transition:all 0.25s;width:100%;text-decoration:none;}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:linear-gradient(135deg,#00923F,#22a35f);color:#fff;
+  box-shadow:0 8px 20px rgba(0,146,63,0.24);}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(0,146,63,0.34);}
+.btn-blue{background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));color:#fff;
+  box-shadow:0 8px 20px rgba(0,87,153,0.22);}
+.btn-blue:hover{box-shadow:0 12px 28px rgba(0,87,153,0.34);}
+.btn-outline{background:#fff;border:1.5px solid rgba(0,43,74,0.14);color:var(--sv-navy);}
+.btn-outline:hover{border-color:var(--sv-blue);color:var(--sv-blue);}
+
+/* DASHBOARD CARD */
+.dash-hero{background:linear-gradient(135deg,#00923F,#005f29);color:#fff;
+  border-radius:18px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden;}
+.dash-hero::before{content:"";position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;border-radius:50%;background:rgba(255,193,7,0.15);}
+.dash-hero-inner{position:relative;z-index:2;}
+.dash-hero-label{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;opacity:0.75;margin-bottom:4px;}
+.dash-hero-name{font-family:"Playfair Display",serif;font-size:22px;font-weight:800;line-height:1.15;}
+.dash-hero-sub{font-size:11.5px;margin-top:6px;font-weight:600;opacity:0.85;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.dash-hero-sub .pill{background:rgba(255,193,7,0.22);color:#FFC107;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:800;letter-spacing:0.5px;}
+
+/* TILES */
+.tiles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px;}
+.tile{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:20px 14px;
+  text-align:center;cursor:pointer;transition:all 0.25s;}
+.tile:hover{transform:translateY(-3px);border-color:var(--sv-green);
+  box-shadow:0 12px 28px rgba(0,146,63,0.14);}
+.tile-icon{width:52px;height:52px;margin:0 auto 10px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  box-shadow:0 6px 16px rgba(0,43,74,0.14);}
+.tile-icon.green{background:linear-gradient(135deg,#00923F,#22a35f);color:#fff;}
+.tile-icon.blue{background:linear-gradient(135deg,#005799,#002B4A);color:#fff;}
+.tile-icon.gold{background:linear-gradient(135deg,#FFC107,#E0A800);color:#002B4A;}
+.tile-icon.purple{background:linear-gradient(135deg,#6f42c1,#8250df);color:#fff;}
+.tile-icon.red{background:linear-gradient(135deg,#dc3545,#b02a37);color:#fff;}
+.tile-label{font-size:13px;font-weight:800;color:var(--sv-navy);line-height:1.2;}
+.tile-desc{font-size:10.5px;color:var(--muted);font-weight:600;margin-top:3px;}
+
+/* SECTION HEAD */
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.section-head h3{font-size:15px;font-weight:800;color:var(--sv-navy);}
+.badge{background:rgba(0,146,63,0.12);color:var(--sv-green);font-size:11px;
+  font-weight:800;padding:4px 12px;border-radius:20px;}
+
+.empty{padding:32px 20px;text-align:center;color:var(--muted);}
+.empty .ico{font-size:36px;opacity:0.4;margin-bottom:10px;}
+.empty p{font-size:12px;font-weight:600;}
+
+/* STUDENT LIST */
+.student-row-card{background:#fff;border:1px solid var(--border);border-radius:14px;
+  padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
+.student-avatar{width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--sv-blue),var(--sv-navy));
+  color:#fff;font-weight:800;font-size:18px;
+  display:flex;align-items:center;justify-content:center;}
+.student-info{flex:1;min-width:0;}
+.student-name{font-size:14px;font-weight:800;color:var(--sv-navy);margin-bottom:2px;}
+.student-meta{font-size:11px;color:var(--muted);font-weight:500;}
+
+/* NOTICE CARD */
+.notice-card{background:linear-gradient(135deg,#FFF9E6,#fff);
+  border:1px solid rgba(255,193,7,0.30);border-left:4px solid var(--sv-gold);
+  border-radius:14px;padding:16px;margin-bottom:10px;}
+.notice-card .ann-title{font-size:13px;font-weight:800;color:var(--sv-navy);margin-bottom:4px;}
+.notice-card .ann-meta{font-size:10.5px;color:var(--muted);font-weight:600;margin-bottom:6px;}
+.notice-card .ann-body{font-size:12px;color:var(--muted);line-height:1.55;}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(20px + var(--safe-bottom));left:50%;
+  transform:translate(-50%,140%);background:var(--sv-navy);color:#fff;
+  padding:12px 22px;border-radius:50px;font-size:12.5px;font-weight:700;
+  z-index:2000;transition:transform 0.4s;box-shadow:0 12px 30px rgba(0,43,74,0.4);
+  max-width:90vw;text-align:center;}
+.toast.show{transform:translate(-50%,0);}
+.toast.error{background:#C62828;}
+.toast.success{background:var(--sv-green);}
+
+@media (max-width:480px){
+  .hero h1{font-size:26px;}
+  .field-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== SCREEN 1: LOGIN ===================== -->
+<div class="screen active" id="screen-login">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Office Desk</div>
+      <div class="header-sub">Sri Viswa School</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home">🏠</a>
+  </div>
+  <div class="container">
+
+    <div class="hero">
+      <h1>Office Login 🏢</h1>
+      <p>Enter your name and PIN to access the office desk.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> <span id="welcome-text">Sign In</span></div>
+
+      <div class="field" id="name-field">
+        <label class="field-label">Office Staff Name</label>
+        <input type="text" id="login-name" class="field-input"
+               placeholder="e.g. Mr. Kumar" maxlength="40"
+               autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label class="field-label">4-Digit PIN</label>
+        <input type="password" id="login-pin" class="field-input code-input"
+               placeholder="• • • •" maxlength="4"
+               inputmode="numeric" autocomplete="off"
+               onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+
+      <button class="btn btn-primary" onclick="doLogin()">
+        🔐 Login
+      </button>
+
+      <button class="btn btn-outline" id="btn-change-user" onclick="changeUser()"
+              style="margin-top:10px;display:none;">
+        ↩ Change User
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN 2: DASHBOARD ===================== -->
+<div class="screen" id="screen-dashboard">
+  <div class="header">
+    <img src="./assets/logo.png" class="header-logo" alt=""
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="header-logo-fb">SV</div>
+    <div class="header-info">
+      <div class="header-title">Office Desk</div>
+      <div class="header-sub" id="dash-sub">Admin Center</div>
+    </div>
+    <a class="header-btn" href="./index.html" title="Home">🏠</a>
+    <button class="header-btn" onclick="logout()" title="Logout">↩</button>
+  </div>
+  <div class="container">
+
+    <div class="dash-hero">
+      <div class="dash-hero-inner">
+        <div class="dash-hero-label">Office Staff</div>
+        <div class="dash-hero-name" id="dash-name">—</div>
+        <div class="dash-hero-sub">
+          <span class="pill">Sri Viswa School</span>
+          <span>Palakollu</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tiles-grid">
+      <div class="tile" onclick="openStudents()">
+        <div class="tile-icon blue">🎓</div>
+        <div class="tile-label">Students</div>
+        <div class="tile-desc">View Classes</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Fees')">
+        <div class="tile-icon gold">💰</div>
+        <div class="tile-label">Fees</div>
+        <div class="tile-desc">Sample Data</div>
+      </div>
+      <div class="tile" onclick="openAnnounce()">
+        <div class="tile-icon red">📢</div>
+        <div class="tile-label">Announcements</div>
+        <div class="tile-desc">Send Notice</div>
+      </div>
+      <div class="tile" onclick="openExamSchedule()">
+        <div class="tile-icon purple">📅</div>
+        <div class="tile-label">Exam Schedule</div>
+        <div class="tile-desc">Send to Principal</div>
+      </div>
+      <div class="tile" onclick="comingSoon('Reports')">
+        <div class="tile-icon green">📊</div>
+        <div class="tile-label">Reports</div>
+        <div class="tile-desc">Sample Flow</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">
+        <h3>📢 Recent Announcements</h3>
+        <span class="badge" id="ann-count">0</span>
+      </div>
+      <div id="ann-list"><div class="empty"><div class="ico">📭</div><p>No announcements yet</p></div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SCREEN 3: STUDENTS ===================== -->
+<div class="screen" id="screen-students">
+  <div class="header">
+    <button class="header-btn" onclick="backDash()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title">Students</div>
+      <div class="header-sub" id="students-sub">View Only</div>
+    </div>
+  </div>
+  <div class="container">
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Select Class</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Class</label>
+          <select id="view-class" class="field-select" onchange="loadClassStudents()">
+            <option value="">Select Class</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Section</label>
+          <select id="view-section" class="field-select" onchange="loadClassStudents()">
+            <option value="">Select Section</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">
+        <h3>👥 Students</h3>
+        <span class="badge" id="students-count">0</span>
+      </div>
+      <div id="students-list">
+        <div class="empty"><div class="ico">🎓</div><p>Select class and section</p></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SCREEN 4: ANNOUNCE ===================== -->
+<div class="screen" id="screen-announce">
+  <div class="header">
+    <button class="header-btn" onclick="backDash()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title">New Announcement</div>
+      <div class="header-sub">Send to Principal</div>
+    </div>
+  </div>
+  <div class="container">
+
+    <div class="hero">
+      <h1>📢 Announce</h1>
+      <p>Create announcement. It will be sent to Principal for approval.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Announcement Details</div>
+
+      <div class="field">
+        <label class="field-label">Target</label>
+        <select id="a-target" class="field-select">
+          <option value="">🏫 School-wide (All Classes)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Title</label>
+        <input type="text" id="a-title" class="field-input"
+               placeholder="e.g. Annual Day Celebration" maxlength="80">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Details</label>
+        <textarea id="a-details" class="field-textarea"
+                  placeholder="Full announcement details..."></textarea>
+      </div>
+
+      <button class="btn btn-primary" onclick="sendAnnouncement()">
+        📤 Send to Principal
+      </button>
+
+      <button class="btn btn-outline" onclick="backDash()" style="margin-top:10px;">
+        ← Cancel
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SCREEN 5: EXAM SCHEDULE ===================== -->
+<div class="screen" id="screen-exam">
+  <div class="header">
+    <button class="header-btn" onclick="backDash()" title="Back">←</button>
+    <div class="header-info">
+      <div class="header-title">Exam Schedule</div>
+      <div class="header-sub">Send to Principal</div>
+    </div>
+  </div>
+  <div class="container">
+
+    <div class="hero">
+      <h1>📅 Exam Schedule</h1>
+      <p>Create exam schedule. Send to Principal for approval.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Exam Details</div>
+
+      <div class="field">
+        <label class="field-label">Exam Name</label>
+        <input type="text" id="e-name" class="field-input"
+               placeholder="e.g. SA1, FA1, Mid-Term" maxlength="30">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Class</label>
+        <select id="e-class" class="field-select">
+          <option value="">Select Class</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Section</label>
+        <select id="e-section" class="field-select">
+          <option value="">Select Section</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Schedule Details</label>
+        <textarea id="e-details" class="field-textarea"
+                  placeholder="e.g.&#10;20-10-2026 · Telugu · Ch 1-5 · 100 marks&#10;22-10-2026 · Hindi · Ch 1-3 · 100 marks"
+                  style="min-height:120px;"></textarea>
+      </div>
+
+      <button class="btn btn-primary" onclick="sendExamSchedule()">
+        📤 Send to Principal
+      </button>
+
+      <button class="btn btn-outline" onclick="backDash()" style="margin-top:10px;">
+        ← Cancel
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase + Config + Utils -->
+<script src="./firebase-config.js"></script>
+<script src="./config.js"></script>
+<script src="./utils.js"></script>
+
+<script>
+/* ============================================================
+   Office Desk Logic
+   ============================================================ */
+
+let FB = { ready: false, db: null, fs: null, auth: null };
+let office = null;        // { name, prefix, phone, pin }
+
+/* ========== FIREBASE INIT ========== */
+(async function initFirebase() {
+  try {
+    if (!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey) return;
+    const [appMod, fsMod, authMod] = await Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js")
+    ]);
+    const app = appMod.initializeApp(window.FIREBASE_CONFIG);
+    FB.db = fsMod.getFirestore(app);
+    FB.fs = fsMod;
+    FB.auth = authMod.getAuth(app);
+    try { await authMod.signInAnonymously(FB.auth); } catch(e) {}
+    FB.ready = true;
+    console.log("✅ Firebase ready");
+  } catch (e) {
+    console.warn("Firebase init failed:", e);
+  }
+})();
+
+/* ========== HELPERS ========== */
+function toast(msg, type) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show" + (type ? " " + type : "");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove("show"), 2800);
+}
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({ top: 0 });
+}
+
+function comingSoon(name) { toast("Coming soon: " + name); }
+window.comingSoon = comingSoon;
+
+/* ========== DROPDOWNS ========== */
+function populateAllDropdowns() {
+  // Students screen
+  const vc = document.getElementById("view-class");
+  SV_CONFIG.classes.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.code;
+    opt.textContent = c.display;
+    vc.appendChild(opt);
+  });
+  const vs = document.getElementById("view-section");
+  SV_CONFIG.sections.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s.code;
+    opt.textContent = s.display;
+    vs.appendChild(opt);
+  });
+
+  // Announce screen — target
+  const at = document.getElementById("a-target");
+  SV_CONFIG.classes.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.code;
+    opt.textContent = c.display;
+    at.appendChild(opt);
+  });
+
+  // Exam screen
+  const ec = document.getElementById("e-class");
+  SV_CONFIG.classes.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.code;
+    opt.textContent = c.display;
+    ec.appendChild(opt);
+  });
+  const es = document.getElementById("e-section");
+  SV_CONFIG.sections.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s.code;
+    opt.textContent = s.display;
+    es.appendChild(opt);
+  });
+}
+
+/* ========== LOGIN ========== */
+function doLogin() {
+  const nameInput = document.getElementById("login-name");
+  const pinInput = document.getElementById("login-pin");
+  const name = nameInput.value.trim();
+  const pin = pinInput.value.trim();
+
+  const expectedName = office ? office.name : name;
+  const expectedPin = office ? office.pin : null;
+
+  if (!expectedName) return toast("Enter your name", "error");
+  if (!pin) return toast("Enter your PIN", "error");
+
+  if (!office) {
+    loadOfficeFromFirestore(expectedName, pin);
+  } else {
+    if (pin !== expectedPin) return toast("Incorrect PIN", "error");
+    toast("Welcome, " + office.name + "!", "success");
+    setTimeout(showDashboard, 500);
+  }
+}
+window.doLogin = doLogin;
+
+async function loadOfficeFromFirestore(name, pin) {
+  if (!FB.ready || !FB.db) {
+    return toast("Firebase not ready", "error");
+  }
+  try {
+    const { collection, query, where, getDocs } = FB.fs;
+    const staffRef = collection(FB.db, "staff");
+    const q = query(staffRef, where("name", "==", name), where("role", "==", "office"));
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      return toast("Office staff not found. Contact Principal.", "error");
+    }
+
+    let found = null;
+    snap.forEach(doc => {
+      const data = doc.data();
+      if (data.pin === pin) {
+        found = { id: doc.id, ...data };
+      }
+    });
+
+    if (!found) return toast("Incorrect PIN", "error");
+
+    office = found;
+    SV.saveLocal("svs_office", office);
+
+    toast("Welcome, " + office.name + "!", "success");
+    setTimeout(showDashboard, 500);
+  } catch (e) {
+    console.error(e);
+    toast("Login failed: " + e.message, "error");
+  }
+}
+
+function changeUser() {
+  if (!confirm("Change User?")) return;
+  SV.clearLocal("svs_office");
+  office = null;
+  location.reload();
+}
+window.changeUser = changeUser;
+
+function logout() {
+  if (!confirm("Logout from Office Desk?")) return;
+  SV.clearLocal("svs_office");
+  office = null;
+  location.reload();
+}
+window.logout = logout;
+
+/* ========== DASHBOARD ========== */
+function showDashboard() {
+  if (!office) return;
+  document.getElementById("dash-name").textContent =
+    (office.prefix ? office.prefix + " " : "") + office.name;
+  showScreen("screen-dashboard");
+  loadRecentAnnouncements();
+}
+
+function backDash() {
+  showDashboard();
+}
+window.backDash = backDash;
+
+/* ========== STUDENTS VIEW ========== */
+function openStudents() {
+  document.getElementById("view-class").value = "";
+  document.getElementById("view-section").value = "";
+  document.getElementById("students-list").innerHTML =
+    '<div class="empty"><div class="ico">🎓</div><p>Select class and section</p></div>';
+  document.getElementById("students-count").textContent = "0";
+  showScreen("screen-students");
+}
+window.openStudents = openStudents;
+
+async function loadClassStudents() {
+  const classCode = document.getElementById("view-class").value;
+  const sectionCode = document.getElementById("view-section").value;
+
+  if (!classCode || !sectionCode) return;
+
+  if (!FB.ready || !FB.db) return toast("Firebase not ready", "error");
+
+  const listEl = document.getElementById("students-list");
+  const countEl = document.getElementById("students-count");
+  listEl.innerHTML = '<div class="empty"><div class="ico">⏳</div><p>Loading...</p></div>';
+
+  try {
+    const { collection, query, where, getDocs } = FB.fs;
+    const studentsRef = collection(FB.db, "students");
+    const q = query(
+      studentsRef,
+      where("class", "==", classCode),
+      where("section", "==", sectionCode)
+    );
+    const snap = await getDocs(q);
+    const items = [];
+    snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+    items.sort((a, b) => (a.roll || 0) - (b.roll || 0));
+
+    countEl.textContent = items.length;
+
+    if (items.length === 0) {
+      listEl.innerHTML = '<div class="empty"><div class="ico">📭</div><p>No students in this class</p></div>';
+      return;
+    }
+
+    listEl.innerHTML = items.map(s => `
+      <div class="student-row-card">
+        <div class="student-avatar">${SV.escapeHtml((s.name || "?").charAt(0).toUpperCase())}</div>
+        <div class="student-info">
+          <div class="student-name">${SV.escapeHtml(s.name || "—")}</div>
+          <div class="student-meta">
+            ${s.code || "—"} · Roll ${s.roll || "—"} · DOB ${SV.prettyDate(s.dob) || "—"}
+          </div>
+        </div>
+      </div>
+    `).join("");
+  } catch (e) {
+    console.warn("Students load failed:", e);
+    listEl.innerHTML = '<div class="empty"><div class="ico">⚠️</div><p>Load failed</p></div>';
+  }
+}
+window.loadClassStudents = loadClassStudents;
+
+/* ========== ANNOUNCEMENTS ========== */
+function openAnnounce() {
+  document.getElementById("a-target").value = "";
+  document.getElementById("a-title").value = "";
+  document.getElementById("a-details").value = "";
+  showScreen("screen-announce");
+}
+window.openAnnounce = openAnnounce;
+
+async function sendAnnouncement() {
+  const target = document.getElementById("a-target").value;
+  const title = document.getElementById("a-title").value.trim();
+  const details = document.getElementById("a-details").value.trim();
+
+  if (!title) return toast("Enter title", "error");
+  if (!details) return toast("Enter details", "error");
+  if (!FB.ready || !FB.db) return toast("Firebase not ready", "error");
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = "Sending...";
+
+  try {
+    const { collection, addDoc } = FB.fs;
+    const jobsRef = collection(FB.db, "jobs");
+    const dateStr = SV.todayISO();
+
+    // If target is blank → school-wide
+    const className = target ? (target + "-") : "";
+    // Note: for school-wide, className = ""
+
+    let classNameValue = "";
+    if (target) {
+      // Format: "06A" (with default A section if not specified)
+      // For simplicity: use class + "-A" as target class
+      classNameValue = target; // just class code
+    }
+
+    await addDoc(jobsRef, {
+      type: "announce",
+      className: classNameValue,
+      date: dateStr,
+      postedBy: "office",
+      postedByName: office ? ((office.prefix || "") + " " + office.name).trim() : "Office",
+      data: { content: title, details: details },
+      status: "pending",
+      createdAt: Date.now()
+    });
+
+    toast("Sent to Principal ✓", "success");
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = "📤 Send to Principal";
+      backDash();
+    }, 700);
+  } catch (e) {
+    console.error(e);
+    toast("Send failed: " + e.message, "error");
+    btn.disabled = false;
+    btn.textContent = "📤 Send to Principal";
+  }
+}
+window.sendAnnouncement = sendAnnouncement;
+
+function loadRecentAnnouncements() {
+  if (!FB.ready || !FB.db) return;
+  const { collection, onSnapshot, query, where } = FB.fs;
+  const jobsRef = collection(FB.db, "jobs");
+  const q = query(jobsRef, where("type", "==", "announce"));
+
+  onSnapshot(q, (snap) => {
+    const list = [];
+    snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+    list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+    const el = document.getElementById("ann-list");
+    const countEl = document.getElementById("ann-count");
+    countEl.textContent = list.length;
+
+    if (list.length === 0) {
+      el.innerHTML = '<div class="empty"><div class="ico">📭</div><p>No announcements yet</p></div>';
+      return;
+    }
+
+    el.innerHTML = list.slice(0, 5).map(j => {
+      const d = j.data || {};
+      const status = j.status || "pending";
+      const badge = status === "approved" ? "✅ Approved" : (status === "pending" ? "⏳ Pending" : "❌ Rejected");
+      return `
+        <div class="notice-card">
+          <div class="ann-title">📢 ${SV.escapeHtml(d.content || "Announcement")}</div>
+          <div class="ann-meta">
+            📅 ${SV.prettyDate(j.date)} · 
+            ${j.className ? "Class " + j.className : "School-wide"} · 
+            ${badge}
+          </div>
+          ${d.details ? `<div class="ann-body">${SV.escapeHtml(d.details)}</div>` : ""}
+        </div>
+      `;
+    }).join("");
+  });
+}
+
+/* ========== EXAM SCHEDULE ========== */
+function openExamSchedule() {
+  document.getElementById("e-name").value = "";
+  document.getElementById("e-class").value = "";
+  document.getElementById("e-section").value = "";
+  document.getElementById("e-details").value = "";
+  showScreen("screen-exam");
+}
+window.openExamSchedule = openExamSchedule;
+
+async function sendExamSchedule() {
+  const examName = document.getElementById("e-name").value.trim();
+  const classCode = document.getElementById("e-class").value;
+  const sectionCode = document.getElementById("e-section").value;
+  const details = document.getElementById("e-details").value.trim();
+
+  if (!examName) return toast("Enter exam name", "error");
+  if (!classCode) return toast("Select class", "error");
+  if (!sectionCode) return toast("Select section", "error");
+  if (!details) return toast("Enter schedule details", "error");
+  if (!FB.ready || !FB.db) return toast("Firebase not ready", "error");
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = "Sending...";
+
+  try {
+    const { collection, addDoc } = FB.fs;
+    const jobsRef = collection(FB.db, "jobs");
+
+    const classNameValue = classCode + "-" + sectionCode;
+
+    await addDoc(jobsRef, {
+      type: "exam",
+      examName: examName,
+      className: classNameValue,
+      class: classCode,
+      section: sectionCode,
+      date: SV.todayISO(),
+      postedBy: "office",
+      postedByName: office ? ((office.prefix || "") + " " + office.name).trim() : "Office",
+      data: { details: details },
+      status: "pending",
+      createdAt: Date.now()
+    });
+
+    toast("Sent to Principal ✓", "success");
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = "📤 Send to Principal";
+      backDash();
+    }, 700);
+  } catch (e) {
+    console.error(e);
+    toast("Send failed: " + e.message, "error");
+    btn.disabled = false;
+    btn.textContent = "📤 Send to Principal";
+  }
+}
+window.sendExamSchedule = sendExamSchedule;
+
+/* ========== INIT ========== */
+(function init() {
+  populateAllDropdowns();
+
+  const saved = SV.loadLocal("svs_office", null);
+  if (saved && saved.name) {
+    office = saved;
+    document.getElementById("name-field").style.display = "none";
+    document.getElementById("welcome-text").textContent =
+      "Welcome, " + (saved.prefix ? saved.prefix + " " : "") + saved.name;
+    document.getElementById("btn-change-user").style.display = "inline-flex";
+    setTimeout(() => document.getElementById("login-pin").focus(), 400);
+  } else {
+    document.getElementById("name-field").style.display = "block";
+    document.getElementById("welcome-text").textContent = "Sign In";
+    document.getElementById("btn-change-user").style.display = "none";
+  }
+
+  console.log("✅ office.html loaded");
+})();
+</script>
+
+</body>
+</html>
