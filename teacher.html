@@ -336,7 +336,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 
 <script>
 /* ============================================================
-   Teacher Desk Logic — Phase 1 (Fixed Case-Insensitive Login)
+   Teacher Desk Logic — Phase 1 (Fixed Stack Overflow)
    ============================================================ */
 
 let FB = { ready: false, db: null, fs: null, auth: null };
@@ -380,7 +380,6 @@ function showScreen(id) {
 }
 
 function comingSoon(name) { toast("Coming soon: " + name); }
-window.comingSoon = comingSoon;
 
 // Capitalize name for display
 function capitalizeName(n) {
@@ -409,11 +408,9 @@ function doLogin() {
     setTimeout(showDashboard, 500);
   }
 }
-window.doLogin = doLogin;
 
 async function loadTeacherFromFirestore(name, pin) {
   console.log("🔵 Teacher login — name:", name, "pin:", pin);
-  console.log("   FB.ready:", FB.ready, "FB.db:", !!FB.db);
 
   if (!FB.ready || !FB.db) {
     return toast("Firebase not ready. Wait 5 sec and try again.", "error");
@@ -423,7 +420,6 @@ async function loadTeacherFromFirestore(name, pin) {
     const { collection, query, where, getDocs } = FB.fs;
     const staffRef = collection(FB.db, "staff");
 
-    // Fetch all teachers (small number, safe)
     const q = query(staffRef, where("role", "==", "teacher"));
     const snap = await getDocs(q);
 
@@ -433,14 +429,12 @@ async function loadTeacherFromFirestore(name, pin) {
       return toast("No teachers registered yet", "error");
     }
 
-    // Case-insensitive match
     const searchName = name.toLowerCase().trim();
     let found = null;
 
     snap.forEach(doc => {
       const data = doc.data();
       const firestoreName = (data.name || "").toLowerCase().trim();
-      console.log("   Checking:", firestoreName, "vs", searchName, "| pin match:", data.pin === pin);
       if (firestoreName === searchName && data.pin === pin) {
         found = { id: doc.id, ...data };
       }
@@ -471,7 +465,6 @@ function changeUser() {
   teacher = null;
   location.reload();
 }
-window.changeUser = changeUser;
 
 function logout() {
   if (!confirm("Logout from Teacher Desk?")) return;
@@ -479,7 +472,6 @@ function logout() {
   teacher = null;
   location.reload();
 }
-window.logout = logout;
 
 /* ========== DASHBOARD ========== */
 async function showDashboard() {
@@ -556,12 +548,10 @@ function openMyClass() {
 
   showScreen("screen-class");
 }
-window.openMyClass = openMyClass;
 
 function backDash() {
   showDashboard();
 }
-window.backDash = backDash;
 
 function renderStudentRows(students) {
   const container = document.getElementById("student-rows");
@@ -574,6 +564,7 @@ function renderStudentRows(students) {
   updateStudentCount();
 }
 
+// Main addStudentRow function
 function addStudentRow(roll, name, dob) {
   const container = document.getElementById("student-rows");
   const currentRows = container.children.length;
@@ -617,7 +608,6 @@ function deleteStudentRow(btn) {
     updateStudentCount();
   }
 }
-window.deleteStudentRow = deleteStudentRow;
 
 function renumberRows() {
   const container = document.getElementById("student-rows");
@@ -638,11 +628,6 @@ function updateStudentCount() {
   const count = document.getElementById("student-rows").children.length;
   document.getElementById("student-count").textContent = count;
 }
-
-function addStudentRowPublic() {
-  addStudentRow();
-}
-window.addStudentRow = addStudentRowPublic;
 
 async function saveClass() {
   if (!teacher) return;
@@ -727,7 +712,23 @@ async function saveClass() {
     }
   }
 }
+
+/* ============================================================
+   EXPOSE GLOBALS (CRITICAL — for inline onclick handlers)
+   ============================================================ */
+
+window.doLogin = doLogin;
+window.changeUser = changeUser;
+window.logout = logout;
+window.comingSoon = comingSoon;
+window.openMyClass = openMyClass;
+window.backDash = backDash;
+window.addStudentRow = function() { addStudentRow(); };
+window.deleteStudentRow = deleteStudentRow;
 window.saveClass = saveClass;
+window.loadMyClass = loadMyClass;
+
+console.log("✅ All functions exposed to window");
 
 /* ========== INIT ========== */
 (function init() {
