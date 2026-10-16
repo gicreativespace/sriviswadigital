@@ -162,7 +162,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 </head>
 <body>
 
-<!-- ===================== SCREEN 1: LOGIN ===================== -->
+<!-- SCREEN 1: LOGIN -->
 <div class="screen active" id="screen-login">
   <div class="header">
     <img src="./assets/logo.png" class="header-logo" alt=""
@@ -211,7 +211,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 2: DASHBOARD ===================== -->
+<!-- SCREEN 2: DASHBOARD -->
 <div class="screen" id="screen-dashboard">
   <div class="header">
     <img src="./assets/logo.png" class="header-logo" alt=""
@@ -276,7 +276,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 3: STUDENTS ===================== -->
+<!-- SCREEN 3: STUDENTS -->
 <div class="screen" id="screen-students">
   <div class="header">
     <button class="header-btn" onclick="backDash()" title="Back">←</button>
@@ -319,7 +319,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 4: ANNOUNCE ===================== -->
+<!-- SCREEN 4: ANNOUNCE -->
 <div class="screen" id="screen-announce">
   <div class="header">
     <button class="header-btn" onclick="backDash()" title="Back">←</button>
@@ -357,7 +357,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
                   placeholder="Full announcement details..."></textarea>
       </div>
 
-      <button class="btn btn-primary" onclick="sendAnnouncement()">
+      <button class="btn btn-primary" id="btn-send-ann" onclick="sendAnnouncement()">
         📤 Send to Principal
       </button>
 
@@ -369,7 +369,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
   </div>
 </div>
 
-<!-- ===================== SCREEN 5: EXAM SCHEDULE ===================== -->
+<!-- SCREEN 5: EXAM SCHEDULE -->
 <div class="screen" id="screen-exam">
   <div class="header">
     <button class="header-btn" onclick="backDash()" title="Back">←</button>
@@ -415,7 +415,7 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
                   style="min-height:120px;"></textarea>
       </div>
 
-      <button class="btn btn-primary" onclick="sendExamSchedule()">
+      <button class="btn btn-primary" id="btn-send-exam" onclick="sendExamSchedule()">
         📤 Send to Principal
       </button>
 
@@ -429,18 +429,17 @@ body{min-height:100vh;font-family:"Inter",sans-serif;color:#002B4A;
 
 <div class="toast" id="toast"></div>
 
-<!-- Firebase + Config + Utils -->
 <script src="./firebase-config.js"></script>
 <script src="./config.js"></script>
 <script src="./utils.js"></script>
 
 <script>
 /* ============================================================
-   Office Desk Logic
+   Office Desk Logic (Case-Insensitive Login Fixed)
    ============================================================ */
 
 let FB = { ready: false, db: null, fs: null, auth: null };
-let office = null;        // { name, prefix, phone, pin }
+let office = null;
 
 /* ========== FIREBASE INIT ========== */
 (async function initFirebase() {
@@ -481,6 +480,13 @@ function showScreen(id) {
 function comingSoon(name) { toast("Coming soon: " + name); }
 window.comingSoon = comingSoon;
 
+// Capitalize name for display
+function capitalizeName(n) {
+  return String(n || "").split(" ").map(w =>
+    w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()
+  ).join(" ");
+}
+
 /* ========== DROPDOWNS ========== */
 function populateAllDropdowns() {
   // Students screen
@@ -499,7 +505,7 @@ function populateAllDropdowns() {
     vs.appendChild(opt);
   });
 
-  // Announce screen — target
+  // Announce screen
   const at = document.getElementById("a-target");
   SV_CONFIG.classes.forEach(c => {
     const opt = document.createElement("option");
@@ -533,7 +539,6 @@ function doLogin() {
   const pin = pinInput.value.trim();
 
   const expectedName = office ? office.name : name;
-  const expectedPin = office ? office.pin : null;
 
   if (!expectedName) return toast("Enter your name", "error");
   if (!pin) return toast("Enter your PIN", "error");
@@ -541,45 +546,60 @@ function doLogin() {
   if (!office) {
     loadOfficeFromFirestore(expectedName, pin);
   } else {
-    if (pin !== expectedPin) return toast("Incorrect PIN", "error");
-    toast("Welcome, " + office.name + "!", "success");
+    if (pin !== office.pin) return toast("Incorrect PIN", "error");
+    toast("Welcome, " + capitalizeName(office.name) + "!", "success");
     setTimeout(showDashboard, 500);
   }
 }
 window.doLogin = doLogin;
 
 async function loadOfficeFromFirestore(name, pin) {
+  console.log("🔵 Office login — name:", name, "pin:", pin);
+
   if (!FB.ready || !FB.db) {
-    return toast("Firebase not ready", "error");
+    return toast("Firebase not ready. Wait 5 sec and try again.", "error");
   }
+
   try {
     const { collection, query, where, getDocs } = FB.fs;
     const staffRef = collection(FB.db, "staff");
-    const q = query(staffRef, where("name", "==", name), where("role", "==", "office"));
+
+    // Fetch all office staff
+    const q = query(staffRef, where("role", "==", "office"));
     const snap = await getDocs(q);
 
+    console.log("   Found office staff:", snap.size);
+
     if (snap.empty) {
-      return toast("Office staff not found. Contact Principal.", "error");
+      return toast("No office staff registered", "error");
     }
 
+    // Case-insensitive match
+    const searchName = name.toLowerCase().trim();
     let found = null;
+
     snap.forEach(doc => {
       const data = doc.data();
-      if (data.pin === pin) {
+      const firestoreName = (data.name || "").toLowerCase().trim();
+      if (firestoreName === searchName && data.pin === pin) {
         found = { id: doc.id, ...data };
       }
     });
 
-    if (!found) return toast("Incorrect PIN", "error");
+    if (!found) {
+      return toast("Incorrect name or PIN", "error");
+    }
 
     office = found;
     SV.saveLocal("svs_office", office);
 
-    toast("Welcome, " + office.name + "!", "success");
+    console.log("✅ Login success:", office.name);
+
+    toast("Welcome, " + capitalizeName(office.name) + "!", "success");
     setTimeout(showDashboard, 500);
   } catch (e) {
-    console.error(e);
-    toast("Login failed: " + e.message, "error");
+    console.error("Login error:", e);
+    toast("Login failed: " + (e.message || "Try again"), "error");
   }
 }
 
@@ -602,8 +622,9 @@ window.logout = logout;
 /* ========== DASHBOARD ========== */
 function showDashboard() {
   if (!office) return;
+  const displayName = capitalizeName(office.name);
   document.getElementById("dash-name").textContent =
-    (office.prefix ? office.prefix + " " : "") + office.name;
+    (office.prefix ? office.prefix + " " : "") + displayName;
   showScreen("screen-dashboard");
   loadRecentAnnouncements();
 }
@@ -692,32 +713,23 @@ async function sendAnnouncement() {
   if (!details) return toast("Enter details", "error");
   if (!FB.ready || !FB.db) return toast("Firebase not ready", "error");
 
-  const btn = event.target;
-  btn.disabled = true;
-  btn.textContent = "Sending...";
+  const btn = document.getElementById("btn-send-ann");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Sending...";
+  }
 
   try {
     const { collection, addDoc } = FB.fs;
     const jobsRef = collection(FB.db, "jobs");
     const dateStr = SV.todayISO();
 
-    // If target is blank → school-wide
-    const className = target ? (target + "-") : "";
-    // Note: for school-wide, className = ""
-
-    let classNameValue = "";
-    if (target) {
-      // Format: "06A" (with default A section if not specified)
-      // For simplicity: use class + "-A" as target class
-      classNameValue = target; // just class code
-    }
-
     await addDoc(jobsRef, {
       type: "announce",
-      className: classNameValue,
+      className: target || "",
       date: dateStr,
       postedBy: "office",
-      postedByName: office ? ((office.prefix || "") + " " + office.name).trim() : "Office",
+      postedByName: office ? ((office.prefix || "") + " " + capitalizeName(office.name)).trim() : "Office",
       data: { content: title, details: details },
       status: "pending",
       createdAt: Date.now()
@@ -725,15 +737,19 @@ async function sendAnnouncement() {
 
     toast("Sent to Principal ✓", "success");
     setTimeout(() => {
-      btn.disabled = false;
-      btn.textContent = "📤 Send to Principal";
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "📤 Send to Principal";
+      }
       backDash();
     }, 700);
   } catch (e) {
     console.error(e);
     toast("Send failed: " + e.message, "error");
-    btn.disabled = false;
-    btn.textContent = "📤 Send to Principal";
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "📤 Send to Principal";
+    }
   }
 }
 window.sendAnnouncement = sendAnnouncement;
@@ -799,9 +815,11 @@ async function sendExamSchedule() {
   if (!details) return toast("Enter schedule details", "error");
   if (!FB.ready || !FB.db) return toast("Firebase not ready", "error");
 
-  const btn = event.target;
-  btn.disabled = true;
-  btn.textContent = "Sending...";
+  const btn = document.getElementById("btn-send-exam");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Sending...";
+  }
 
   try {
     const { collection, addDoc } = FB.fs;
@@ -817,7 +835,7 @@ async function sendExamSchedule() {
       section: sectionCode,
       date: SV.todayISO(),
       postedBy: "office",
-      postedByName: office ? ((office.prefix || "") + " " + office.name).trim() : "Office",
+      postedByName: office ? ((office.prefix || "") + " " + capitalizeName(office.name)).trim() : "Office",
       data: { details: details },
       status: "pending",
       createdAt: Date.now()
@@ -825,15 +843,19 @@ async function sendExamSchedule() {
 
     toast("Sent to Principal ✓", "success");
     setTimeout(() => {
-      btn.disabled = false;
-      btn.textContent = "📤 Send to Principal";
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "📤 Send to Principal";
+      }
       backDash();
     }, 700);
   } catch (e) {
     console.error(e);
     toast("Send failed: " + e.message, "error");
-    btn.disabled = false;
-    btn.textContent = "📤 Send to Principal";
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "📤 Send to Principal";
+    }
   }
 }
 window.sendExamSchedule = sendExamSchedule;
@@ -847,7 +869,7 @@ window.sendExamSchedule = sendExamSchedule;
     office = saved;
     document.getElementById("name-field").style.display = "none";
     document.getElementById("welcome-text").textContent =
-      "Welcome, " + (saved.prefix ? saved.prefix + " " : "") + saved.name;
+      "Welcome, " + (saved.prefix ? saved.prefix + " " : "") + capitalizeName(saved.name);
     document.getElementById("btn-change-user").style.display = "inline-flex";
     setTimeout(() => document.getElementById("login-pin").focus(), 400);
   } else {
